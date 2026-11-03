@@ -47,7 +47,13 @@
       "type": "volum"
     }
   ],
-  "ingredients": [],
+  "ingredients": [
+    {
+      "id": "lok-w3m0n",
+      "name": "Løk",
+      "aliases": []
+    }
+  ],
   "cuisines": [
     {
       "id": "japansk-uvsi6",
