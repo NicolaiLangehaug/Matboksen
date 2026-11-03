@@ -1,0 +1,770 @@
+{
+  "version": 1,
+  "units": [
+    {
+      "id": "stk",
+      "name": "stk",
+      "type": "antall"
+    },
+    {
+      "id": "g",
+      "name": "g",
+      "type": "vekt"
+    },
+    {
+      "id": "kg",
+      "name": "kg",
+      "type": "vekt"
+    },
+    {
+      "id": "ml",
+      "name": "ml",
+      "type": "volum"
+    },
+    {
+      "id": "dl",
+      "name": "dl",
+      "type": "volum"
+    },
+    {
+      "id": "l",
+      "name": "l",
+      "type": "volum"
+    },
+    {
+      "id": "ts",
+      "name": "ts",
+      "type": "volum"
+    },
+    {
+      "id": "ss",
+      "name": "ss",
+      "type": "volum"
+    },
+    {
+      "id": "klype",
+      "name": "klype",
+      "type": "volum"
+    }
+  ],
+  "ingredients": [],
+  "cuisines": [
+    {
+      "id": "japansk-uvsi6",
+      "name": "Japansk"
+    },
+    {
+      "id": "amerikansk-rf89r",
+      "name": "Amerikansk"
+    },
+    {
+      "id": "italiensk-nm622",
+      "name": "Italiensk"
+    },
+    {
+      "id": "fransk-qri12",
+      "name": "Fransk"
+    },
+    {
+      "id": "indisk-421my",
+      "name": "Indisk"
+    },
+    {
+      "id": "tyrkisk-itpm8",
+      "name": "Tyrkisk"
+    },
+    {
+      "id": "spansk-o2wfb",
+      "name": "Spansk"
+    },
+    {
+      "id": "norsk-8r5vi",
+      "name": "Norsk"
+    },
+    {
+      "id": "britisk-03ef4",
+      "name": "Britisk"
+    },
+    {
+      "id": "kinesisk-gxgyb",
+      "name": "Kinesisk"
+    },
+    {
+      "id": "svensk-zymy6",
+      "name": "Svensk"
+    },
+    {
+      "id": "midtosten-w2vq0",
+      "name": "Midtøsten"
+    }
+  ],
+  "tags": [],
+  "recipes": [
+    {
+      "id": "onigiri-kbmpn",
+      "title": "Onigiri",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "japansk-uvsi6",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "smashburger-fq4uk",
+      "title": "Smashburger",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "amerikansk-rf89r",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "lasagne-utz4r",
+      "title": "Lasagne",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "italiensk-nm622",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "flotegratinerte-poteter-g47nb",
+      "title": "Fløtegratinerte poteter",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "fransk-qri12",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "butter-chicken-r4ncl",
+      "title": "Butter chicken",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "indisk-421my",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "biff-hhju5",
+      "title": "Biff",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": null,
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "palak-paneer-jg3ic",
+      "title": "Palak paneer",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "indisk-421my",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "baguetter-med-ost-og-skinke-cml50",
+      "title": "Baguetter med ost og skinke",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "fransk-qri12",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "kebab-stp69",
+      "title": "Kebab",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "tyrkisk-itpm8",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "tapas-kocbe",
+      "title": "Tapas",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "spansk-o2wfb",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "laksesuppe-jxmlx",
+      "title": "Laksesuppe",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "norsk-8r5vi",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "koteletter-go6qv",
+      "title": "Koteletter",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "norsk-8r5vi",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "fish-and-chips-shjsd",
+      "title": "Fish and chips",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "britisk-03ef4",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "pizza-kn3ko",
+      "title": "Pizza",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "italiensk-nm622",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "pasta-carbonara-sdeyp",
+      "title": "Pasta carbonara",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "italiensk-nm622",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "pasta-bolognese-xnuqx",
+      "title": "Pasta bolognese",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "italiensk-nm622",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "sushi-7z8o3",
+      "title": "Sushi",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "japansk-uvsi6",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "ramen-ikv3y",
+      "title": "Ramen",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "japansk-uvsi6",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "chevresalat-49q3t",
+      "title": "Chèvresalat",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "fransk-qri12",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "dumplings-9jhuo",
+      "title": "Dumplings",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "kinesisk-gxgyb",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "kylling-med-cashewnotter-gd1b9",
+      "title": "Kylling med cashewnøtter",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "kinesisk-gxgyb",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "pinnekjott-u59mc",
+      "title": "Pinnekjøtt",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "norsk-8r5vi",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "ribbe-8g6zd",
+      "title": "Ribbe",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "norsk-8r5vi",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "burratasalat-b8xou",
+      "title": "Burratasalat",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "italiensk-nm622",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "mac-and-cheese-ghqio",
+      "title": "Mac and cheese",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "amerikansk-rf89r",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "chicken-nuggets-vvaxt",
+      "title": "Chicken nuggets",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "amerikansk-rf89r",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "spekesild-og-kokte-poteter-ghrmp",
+      "title": "Spekesild og kokte poteter",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "norsk-8r5vi",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "grot-ynl7i",
+      "title": "Grøt",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "norsk-8r5vi",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "svenske-kjottboller-u3dv2",
+      "title": "Svenske kjøttboller",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "svensk-zymy6",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "tomatsuppe-ctao6",
+      "title": "Tomatsuppe",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": null,
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "gnocchi-85pmu",
+      "title": "Gnocchi",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "italiensk-nm622",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "meze-dewv4",
+      "title": "Meze",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "midtosten-w2vq0",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "egg-og-bacon-p36i0",
+      "title": "Egg og bacon",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "britisk-03ef4",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "sandwich-h452v",
+      "title": "Sandwich",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": null,
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "wrap-ehuo5",
+      "title": "Wrap",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": null,
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "bakt-potet-s6smq",
+      "title": "Bakt potet",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": null,
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "polser-9bd3l",
+      "title": "Pølser",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": "norsk-8r5vi",
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "egen"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "createdAt": "2026-11-03T22:00:00.000Z",
+      "updatedAt": "2026-11-03T22:00:00.000Z"
+    }
+  ]
+}
