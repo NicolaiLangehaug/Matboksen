@@ -2,7 +2,7 @@
 // personlig nøkkel som bare ligger i denne nettleseren (localStorage).
 
 const API = 'https://api.github.com';
-const DB_PATH = 'data/db.json';
+const DB_PATH = 'db.json';
 const SETTINGS_KEY = 'matboksen.settings';
 
 const DEFAULTS = { owner: 'NicolaiLangehaug', repo: 'Matboksen', branch: 'main', token: '', login: '' };

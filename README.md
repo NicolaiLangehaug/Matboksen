@@ -1,6 +1,6 @@
 # Matboksen
 
-Familiens kokebok. En enkel nettapp uten server: oppskriftene ligger i `data/db.json` i dette repoet, og appen lagrer endringer via GitHubs API.
+Familiens kokebok. En enkel nettapp uten server: oppskriftene ligger i `db.json` i dette repoet, og appen lagrer endringer via GitHubs API.
 
 ## Kom i gang
 
@@ -8,7 +8,7 @@ Familiens kokebok. En enkel nettapp uten server: oppskriftene ligger i `data/db.
 
 Settings → Pages → *Deploy from a branch* → `main` / `/ (root)`. Etter et minutt eller to ligger appen på `https://<brukernavn>.github.io/Matboksen/`.
 
-> **Merk:** På GitHubs gratisplan virker Pages bare for offentlige repoer. Med GitHub Pro virker det også for private, men **nettsiden er likevel offentlig**, og det samme er `data/db.json` og bildene, fordi Pages publiserer alle filene. Et privat repo skjuler altså ikke oppskriftene hvis Pages er slått på.
+> **Merk:** På GitHubs gratisplan virker Pages bare for offentlige repoer. Med GitHub Pro virker det også for private, men **nettsiden er likevel offentlig**, og det samme er `db.json` og bildene, fordi Pages publiserer alle filene. Et privat repo skjuler altså ikke oppskriftene hvis Pages er slått på.
 
 ### 2. Lag en nøkkel (én per person som skal redigere)
 
@@ -24,7 +24,7 @@ Personer som bare skal lese, trenger ingen nøkkel så lenge Pages er offentlig.
 
 ## Slik er dataene bygget opp
 
-Alt ligger i `data/db.json`:
+Alt ligger i `db.json`:
 
 | Del | Innhold |
 | --- | --- |
