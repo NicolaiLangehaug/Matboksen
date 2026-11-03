@@ -52,6 +52,11 @@
       "id": "lok-w3m0n",
       "name": "Løk",
       "aliases": []
+    },
+    {
+      "id": "burger-owef6",
+      "name": "Burger",
+      "aliases": []
     }
   ],
   "cuisines": [
@@ -132,7 +137,15 @@
       "timeMinutes": null,
       "cuisineId": "amerikansk-rf89r",
       "tagIds": [],
-      "lines": [],
+      "lines": [
+        {
+          "ingredientId": "burger-owef6",
+          "amount": 800,
+          "unitId": "g",
+          "note": "",
+          "group": ""
+        }
+      ],
       "steps": [],
       "image": null,
       "source": {
@@ -140,7 +153,7 @@
       },
       "createdBy": "NicolaiLangehaug",
       "createdAt": "2026-11-03T22:00:00.000Z",
-      "updatedAt": "2026-11-03T22:00:00.000Z"
+      "updatedAt": "2026-11-03T23:06:46.921Z"
     },
     {
       "id": "lasagne-utz4r",
