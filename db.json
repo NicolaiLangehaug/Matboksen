@@ -62,6 +62,11 @@
       "id": "kjottdeig-1tydr",
       "name": "Kjøttdeig",
       "aliases": []
+    },
+    {
+      "id": "burgerbrod-prm0g",
+      "name": "Burgerbrød",
+      "aliases": []
     }
   ],
   "cuisines": [
@@ -149,16 +154,34 @@
           "unitId": "g",
           "note": "",
           "group": ""
+        },
+        {
+          "ingredientId": "lok-w3m0n",
+          "amount": 1,
+          "unitId": "stk",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "burgerbrod-prm0g",
+          "amount": 4,
+          "unitId": "stk",
+          "note": "",
+          "group": ""
         }
       ],
-      "steps": [],
-      "image": null,
+      "steps": [
+        "Smash",
+        "Flipp",
+        "Dander"
+      ],
+      "image": "images/smashburger-fq4uk-1793747348996.jpg",
       "source": {
         "type": "egen"
       },
       "createdBy": "NicolaiLangehaug",
       "createdAt": "2026-11-03T22:00:00.000Z",
-      "updatedAt": "2026-11-03T23:06:58.806Z"
+      "updatedAt": "2026-11-03T23:09:11.702Z"
     },
     {
       "id": "lasagne-utz4r",
