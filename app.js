@@ -47,7 +47,7 @@ function datalist(id, items) {
 
 function renderNav() {
   nav.replaceChildren(
-    hasToken() ? h('a', { href: '#/ny' }, 'Ny oppskrift') : null,
+    h('a', { href: '#/ny' }, 'Ny oppskrift'),
     h('a', { href: '#/lister' }, 'Lister'),
     h('a', { href: '#/innstillinger' }, 'Innstillinger'),
   );
@@ -93,7 +93,7 @@ function renderList() {
     count.textContent = `${list.length} av ${db.recipes.length} oppskrifter`;
     results.replaceChildren(
       ...list.map((r) => {
-        const img = r.image ? h('img', { alt: '', loading: 'lazy' }) : h('div', { class: 'noimg', 'aria-hidden': 'true' });
+        const img = r.image ? h('img', { alt: '', loading: 'lazy' }) : null;
         if (r.image) setImage(img, r.image);
         return h('a', { class: 'recipe-card', href: `#/oppskrift/${encodeURIComponent(r.id)}` },
           img,
@@ -128,18 +128,10 @@ function renderList() {
 
   const panel = h('section', { class: 'filters card' },
     h('label', {}, 'Søk', h('input', { type: 'search', value: filters.q, oninput: (e) => { filters.q = e.target.value; update(); } })),
-    h('div', { class: 'row' },
-      h('label', {}, 'Kjøkken',
-        h('select', { value: filters.cuisine, onchange: (e) => { filters.cuisine = e.target.value; update(); } },
-          h('option', { value: '' }, 'Alle'),
-          db.cuisines.slice().sort((a, b) => a.name.localeCompare(b.name, 'nb')).map((c) => h('option', { value: c.id }, c.name)))),
-      h('label', {}, 'Maks tid',
-        h('select', { value: filters.maxTime, onchange: (e) => { filters.maxTime = e.target.value; update(); } },
-          h('option', { value: '' }, 'Uansett'),
-          [15, 30, 45, 60, 90].map((m) => h('option', { value: String(m) }, `${m} min`))))),
-    h('label', {}, 'Inneholder ingrediens',
-      h('input', { list: 'dl-ing', value: filters.ingredient, oninput: (e) => { filters.ingredient = e.target.value; update(); } })),
-    datalist('dl-ing', db.ingredients),
+    h('label', {}, 'Kjøkken',
+      h('select', { value: filters.cuisine, onchange: (e) => { filters.cuisine = e.target.value; update(); } },
+        h('option', { value: '' }, 'Alle'),
+        db.cuisines.slice().sort((a, b) => a.name.localeCompare(b.name, 'nb')).map((c) => h('option', { value: c.id }, c.name)))),
     db.tags.length ? h('div', {}, h('span', { class: 'label' }, 'Merkelapper (alle må passe)'), tagChips) : null,
     h('button', {
       type: 'button', class: 'link',
@@ -166,7 +158,12 @@ function renderRecipe(id) {
   const img = r.image ? h('img', { class: 'hero', alt: r.title }) : null;
   if (img) setImage(img, r.image);
 
-  app.replaceChildren(h('article', { class: 'card recipe' },
+  const editHref = `#/rediger/${encodeURIComponent(r.id)}`;
+  app.replaceChildren(
+    h('div', { class: 'pagebar' },
+      h('a', { href: '#/' }, '← Alle retter'),
+      h('a', { class: 'button', href: editHref }, 'Rediger')),
+    h('article', { class: 'card recipe' },
     img,
     h('h1', {}, r.title),
     r.description ? h('p', {}, r.description) : null,
@@ -190,13 +187,27 @@ function renderRecipe(id) {
     h('p', { class: 'muted' }, src
       ? ['Kilde: ', h('a', { href: src, target: '_blank', rel: 'noopener noreferrer' }, r.source.site || src)]
       : 'Egen oppskrift'),
-    hasToken() ? h('p', {}, h('a', { class: 'button', href: `#/rediger/${encodeURIComponent(r.id)}` }, 'Rediger')) : null,
-  ));
+    ),
+    h('div', { class: 'pagebar' },
+      h('a', { href: '#/' }, '← Alle retter'),
+      h('a', { class: 'button', href: editHref }, 'Rediger')),
+  );
 }
 
 // ---------- skjema ----------
 function renderForm(id) {
-  if (!hasToken()) { app.replaceChildren(h('p', {}, 'Du må legge inn nøkkel under Innstillinger for å redigere.')); return; }
+  if (!hasToken()) {
+    app.replaceChildren(h('section', { class: 'card' },
+      h('h1', {}, 'Du trenger en nøkkel for å redigere'),
+      h('p', {}, 'Alle kan lese oppskriftene, men for å legge til og endre må appen få lov til å lagre i GitHub. Det gjør du én gang per telefon eller PC:'),
+      h('ol', {},
+        h('li', {}, 'Lag en nøkkel på GitHub: ', h('a', { href: 'https://github.com/settings/personal-access-tokens/new', target: '_blank', rel: 'noopener noreferrer' }, 'Ny fine-grained token'), '. Velg kun repoet Matboksen, og gi Contents: Read and write.'),
+        h('li', {}, 'Kopier nøkkelen og lim den inn under ', h('a', { href: '#/innstillinger' }, 'Innstillinger'), '.')),
+      h('div', { class: 'actions' },
+        h('a', { class: 'button', href: '#/innstillinger' }, 'Gå til innstillinger'),
+        h('a', { href: id ? `#/oppskrift/${id}` : '#/' }, 'Tilbake'))));
+    return;
+  }
   const existing = id ? byId(db.recipes, decodeURIComponent(id)) : null;
   if (id && !existing) { app.replaceChildren(h('p', {}, 'Fant ikke oppskriften.')); return; }
 
@@ -303,7 +314,9 @@ function renderForm(id) {
     } catch (err) { toast(err.message, true); }
   }
 
-  app.replaceChildren(h('form', { class: 'card form', onsubmit: onSubmit },
+  app.replaceChildren(
+    h('div', { class: 'pagebar' }, h('a', { href: existing ? `#/oppskrift/${encodeURIComponent(existing.id)}` : '#/' }, existing ? '← Tilbake til oppskriften' : '← Alle retter')),
+    h('form', { class: 'card form', onsubmit: onSubmit },
     h('h1', {}, existing ? 'Rediger oppskrift' : 'Ny oppskrift'),
     h('label', {}, 'Tittel', title),
     h('label', {}, 'Kort beskrivelse', description),

@@ -86,3 +86,5 @@ form.add button { flex: 0 0 auto; }
 #toast { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 480px; margin: 0 auto; padding: 12px 16px; border-radius: 6px; background: #2b2a27; color: #fff; opacity: 0; pointer-events: none; transition: opacity .15s; }
 #toast.show { opacity: 1; }
 #toast.error { background: #a3221a; }
+.pagebar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+.pagebar a:not(.button) { padding: 10px 0; font-weight: 600; }
