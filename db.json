@@ -57,6 +57,11 @@
       "id": "burger-owef6",
       "name": "Burger",
       "aliases": []
+    },
+    {
+      "id": "kjottdeig-1tydr",
+      "name": "Kjøttdeig",
+      "aliases": []
     }
   ],
   "cuisines": [
@@ -139,7 +144,7 @@
       "tagIds": [],
       "lines": [
         {
-          "ingredientId": "burger-owef6",
+          "ingredientId": "kjottdeig-1tydr",
           "amount": 800,
           "unitId": "g",
           "note": "",
@@ -153,7 +158,7 @@
       },
       "createdBy": "NicolaiLangehaug",
       "createdAt": "2026-11-03T22:00:00.000Z",
-      "updatedAt": "2026-11-03T23:06:46.921Z"
+      "updatedAt": "2026-11-03T23:06:58.806Z"
     },
     {
       "id": "lasagne-utz4r",
