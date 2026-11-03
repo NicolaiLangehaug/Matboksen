@@ -5,13 +5,27 @@ import {
   mergeIngredients, filterRecipes, LIST_KINDS, usage, addItem, renameItem, deleteItem,
 } from './model.js';
 
-export const VERSION = '0.5.1';
+export const VERSION = '0.5.2';
 
 const app = document.getElementById('app');
 document.getElementById('version').textContent = `Matboksen ${VERSION}`;
 const nav = document.getElementById('nav');
 let db = null;
 const filters = { q: '', cuisine: '', tags: [], maxTime: '', ingredient: '' };
+const emptyFilters = () => ({ q: '', cuisine: '', tags: [], maxTime: '', ingredient: '' });
+const filterHref = (kind, id) => `#/filter/${kind}/${encodeURIComponent(id)}`;
+
+// Sett ett filter (og nullstill de andre), vis listen.
+function applyFilterRoute(kind, rawId) {
+  const id = decodeURIComponent(rawId || '');
+  Object.assign(filters, emptyFilters());
+  if (kind === 'kjokken' && byId(db.cuisines, id)) filters.cuisine = id;
+  if (kind === 'merkelapp' && byId(db.tags, id)) filters.tags = [id];
+  if (kind === 'ingrediens') { const i = byId(db.ingredients, id); if (i) filters.ingredient = i.name; }
+  history.replaceState(null, '', '#/');
+  renderNav();
+  renderList();
+}
 
 // ---------- små hjelpere ----------
 // Bygger DOM uten innerHTML, så tekst fra data aldri tolkes som HTML.
@@ -63,10 +77,11 @@ function setImage(img, path) {
 // ---------- ruting ----------
 async function route() {
   renderNav();
-  const [, page, id] = (location.hash || '#/').split('/');
+  const [, page, id, extra] = (location.hash || '#/').split('/');
   try {
     if (page === 'innstillinger') return renderSettings();
     if (!db) db = await load();
+    if (page === 'filter') return applyFilterRoute(id, extra);
     if (page === 'oppskrift') return renderRecipe(id);
     if (page === 'ny') return renderForm(null);
     if (page === 'rediger') return renderForm(id);
@@ -100,11 +115,29 @@ function renderList() {
       h('span', { class: 'toc-meta' }, meta));
   }
 
+  const active = h('div', { class: 'active-filters', 'aria-live': 'polite' });
+  function renderActive() {
+    const items = [];
+    const chip = (label, clear) => h('button', {
+      type: 'button', class: 'chip active', 'aria-label': `Fjern filter: ${label}`,
+      onclick: () => { clear(); renderList(); },
+    }, label, h('span', { class: 'x', 'aria-hidden': 'true' }, '×'));
+    if (filters.q) items.push(chip(`Søk: «${filters.q}»`, () => (filters.q = '')));
+    if (filters.cuisine) items.push(chip(`Kjøkken: ${nameOf(db.cuisines, filters.cuisine)}`, () => (filters.cuisine = '')));
+    for (const t of filters.tags) items.push(chip(`Merkelapp: ${nameOf(db.tags, t)}`, () => (filters.tags = filters.tags.filter((x) => x !== t))));
+    if (filters.ingredient) items.push(chip(`Ingrediens: ${filters.ingredient}`, () => (filters.ingredient = '')));
+    active.replaceChildren(...(items.length ? [h('span', { class: 'label' }, 'Viser kun:'), ...items] : []));
+  }
+
   function update() {
+    renderActive();
     const list = filterRecipes(db, filters);
     count.textContent = `${list.length} av ${db.recipes.length} oppskrifter`;
     if (!list.length) {
-      results.replaceChildren(h('p', {}, db.recipes.length ? 'Ingen oppskrifter passer filtrene.' : 'Ingen oppskrifter ennå.'));
+      results.replaceChildren(db.recipes.length
+        ? h('p', {}, 'Ingen oppskrifter passer filtrene. ',
+            h('button', { type: 'button', class: 'link', onclick: () => { Object.assign(filters, emptyFilters()); renderList(); } }, 'Vis alle'))
+        : h('p', {}, 'Ingen oppskrifter ennå. ', h('a', { href: '#/ny' }, 'Legg til den første')));
       return;
     }
     // Grupper på kjøkken, alfabetisk; retter uten kjøkken til slutt under «Annet».
@@ -116,7 +149,8 @@ function renderList() {
     }
     const keys = [...groups.keys()].sort((a, b) => (a === 'Annet') - (b === 'Annet') || a.localeCompare(b, 'nb'));
     results.replaceChildren(...keys.map((k) => h('section', { class: 'toc-group' },
-      h('h2', {}, k),
+      h('h2', {}, k === 'Annet' || filters.cuisine ? k
+        : h('a', { href: filterHref('kjokken', groups.get(k)[0].cuisineId), 'aria-label': `Vis bare ${k}` }, k)),
       groups.get(k).map(row))));
   }
 
@@ -144,11 +178,11 @@ function renderList() {
     db.tags.length ? h('div', {}, h('span', { class: 'label' }, 'Merkelapper (alle må passe)'), tagChips) : null,
     h('button', {
       type: 'button', class: 'link',
-      onclick: () => { Object.assign(filters, { q: '', cuisine: '', tags: [], maxTime: '', ingredient: '' }); route(); },
+      onclick: () => { Object.assign(filters, emptyFilters()); renderList(); },
     }, 'Nullstill filtre'),
   );
 
-  app.replaceChildren(panel, count, results);
+  app.replaceChildren(panel, active, count, results);
   update();
 }
 
@@ -178,13 +212,16 @@ function renderRecipe(id) {
       h('a', { class: 'button', href: editHref }, 'Rediger')),
     h('article', { class: 'card recipe' },
     photo,
-    r.tagIds.length ? h('div', { class: 'stamps' }, r.tagIds.map((t) => h('span', { class: 'stamp' }, nameOf(db.tags, t)))) : null,
+    r.tagIds.length ? h('div', { class: 'stamps' }, r.tagIds.map((t) => h('a', { class: 'stamp', href: filterHref('merkelapp', t), 'aria-label': `Alle retter merket ${nameOf(db.tags, t)}` }, nameOf(db.tags, t)))) : null,
     h('h1', {}, r.title),
-    h('p', { class: 'muted' }, [
-      nameOf(db.cuisines, r.cuisineId),
-      r.timeMinutes ? `${r.timeMinutes} min` : '',
-      r.servings ? `${r.servings} porsjoner` : '',
-    ].filter(Boolean).join(' · ')),
+    h('p', { class: 'muted meta' },
+      [
+        r.cuisineId && byId(db.cuisines, r.cuisineId)
+          ? h('a', { href: filterHref('kjokken', r.cuisineId), 'aria-label': `Alle retter fra ${nameOf(db.cuisines, r.cuisineId)} kjøkken` }, nameOf(db.cuisines, r.cuisineId))
+          : null,
+        r.timeMinutes ? `${r.timeMinutes} min` : null,
+        r.servings ? `${r.servings} porsjoner` : null,
+      ].filter(Boolean).flatMap((x, i) => (i ? [' · ', x] : [x]))),
     r.description ? h('p', { class: 'note' }, r.description) : null,
     h('h2', {}, 'Ingredienser'),
     r.lines.length ? null : h('p', { class: 'muted' }, 'Ikke lagt inn ennå.'),
@@ -414,7 +451,7 @@ function listSection(kind) {
           const n = usage(db, kind, i.id);
           return h('li', {},
             h('span', { class: 'item-name' },
-              i.name,
+              n ? h('a', { href: filterHref({ cuisines: 'kjokken', tags: 'merkelapp', ingredients: 'ingrediens' }[kind], i.id), 'aria-label': `Vis retter med ${i.name}` }, i.name) : i.name,
               i.aliases && i.aliases.length ? h('span', { class: 'muted' }, ` (også: ${i.aliases.join(', ')})`) : null,
               h('span', { class: 'muted' }, ` · ${n} oppskrift${n === 1 ? '' : 'er'}`)),
             canEdit ? h('span', { class: 'item-actions' },
@@ -466,9 +503,9 @@ function renderSettings() {
     status.textContent = 'Sjekker …';
     try {
       const { login, canWrite } = await testConnection();
-      status.textContent = canWrite
-        ? `Innlogget som ${login}. Du kan lagre.`
-        : `Innlogget som ${login}, men nøkkelen kan bare lese.`;
+      status.replaceChildren(
+        canWrite ? `Innlogget som ${login}. Du kan lagre. ` : `Innlogget som ${login}, men nøkkelen kan bare lese. `,
+        h('a', { href: '#/' }, 'Til oppskriftene →'));
     } catch (err) { status.textContent = err.message; }
     renderNav();
   }
