@@ -62,10 +62,15 @@ async function gh(path, { method = 'GET', body, accept } = {}) {
   return res;
 }
 
-function explain(res) {
-  if (res.status === 401) return 'Nøkkelen er ugyldig eller utløpt. Sjekk Innstillinger.';
-  if (res.status === 403) return 'Nøkkelen mangler tilgang (Contents: Read and write) eller grensen for forespørsler er nådd.';
-  if (res.status === 404) return 'Fant ikke repoet eller filen. Sjekk eier, repo og gren i Innstillinger, og at nøkkelen gjelder dette repoet.';
+const WRITE_HELP = 'Nøkkelen har ikke lov til å lagre i Matboksen. Rediger nøkkelen på GitHub: velg «Only select repositories» → Matboksen, og sett Contents til «Read and write».';
+
+function explain(res, writing = false) {
+  if (res.status === 401) return 'Nøkkelen er ugyldig eller utløpt. Lag en ny og lim den inn under Innstillinger.';
+  if (res.status === 403 && res.headers.get('x-ratelimit-remaining') === '0') {
+    return 'GitHub sin grense for antall forespørsler er nådd. Vent litt og prøv igjen.';
+  }
+  if (res.status === 403) return writing ? WRITE_HELP : 'Nøkkelen har ikke tilgang til Matboksen. ' + WRITE_HELP;
+  if (res.status === 404) return writing ? WRITE_HELP : 'Fant ikke repoet eller filen. Sjekk eier, repo og gren i Innstillinger, og at nøkkelen gjelder Matboksen.';
   return `GitHub svarte ${res.status}.`;
 }
 
@@ -123,7 +128,7 @@ export async function save(mutate, message) {
       await new Promise((r) => setTimeout(r, 300 + attempt * 400));
       continue;
     }
-    throw new StoreError(explain(res), res.status);
+    throw new StoreError(explain(res, true), res.status);
   }
   throw new StoreError('Klarte ikke å lagre etter flere forsøk. Prøv igjen om litt.');
 }
@@ -135,7 +140,7 @@ export async function uploadImage(path, blob) {
     method: 'PUT',
     body: { message: `Bilde: ${path}`, content: bytesToB64(bytes), branch: s.branch },
   });
-  if (!res.ok) throw new StoreError(explain(res), res.status);
+  if (!res.ok) throw new StoreError(explain(res, true), res.status);
   return path;
 }
 
@@ -164,8 +169,15 @@ export async function testConnection() {
   const user = await res.json();
   const repo = await gh('');
   if (!repo.ok) throw new StoreError(explain(repo), repo.status);
-  const info = await repo.json();
-  const canWrite = !!(info.permissions && info.permissions.push);
+  await repo.json();
+  // Sjekk om NØKKELEN kan skrive, uten å endre noe: et skriveforsøk med feil
+  // sha avvises med 409/422 hvis nøkkelen har skrivetilgang, og med 403/404 hvis ikke.
+  const probe = await gh(`/contents/${DB_PATH}`, {
+    method: 'PUT',
+    body: { message: 'tilgangssjekk', content: '', sha: '0000000000000000000000000000000000000000', branch: s.branch },
+  });
+  const canWrite = probe.status === 409 || probe.status === 422 ? true
+    : probe.status === 403 || probe.status === 404 ? false : null;
   saveSettings({ login: user.login });
   return { login: user.login, canWrite };
 }

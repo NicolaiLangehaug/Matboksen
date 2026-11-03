@@ -5,7 +5,7 @@ import {
   mergeIngredients, filterRecipes, LIST_KINDS, usage, addItem, renameItem, deleteItem,
 } from './model.js';
 
-export const VERSION = '0.5.2';
+export const VERSION = '0.5.4';
 
 const app = document.getElementById('app');
 document.getElementById('version').textContent = `Matboksen ${VERSION}`;
@@ -234,13 +234,8 @@ function renderRecipe(id) {
     ]),
     h('h2', {}, 'Slik gjør du'),
     r.steps.length ? h('ol', { class: 'steps' }, r.steps.map((s) => h('li', {}, s))) : h('p', { class: 'muted' }, 'Ikke lagt inn ennå.'),
-    h('p', { class: 'muted' }, src
-      ? ['Kilde: ', h('a', { href: src, target: '_blank', rel: 'noopener noreferrer' }, r.source.site || src)]
-      : 'Egen oppskrift'),
+    src ? h('p', { class: 'muted' }, 'Kilde: ', h('a', { href: src, target: '_blank', rel: 'noopener noreferrer' }, r.source.site || src)) : null,
     ),
-    h('div', { class: 'pagebar' },
-      h('a', { href: '#/' }, '← Alle retter'),
-      h('a', { class: 'button', href: editHref }, 'Rediger')),
   );
 }
 
@@ -283,10 +278,10 @@ function renderForm(id) {
         h('option', { value: '' }, '–'),
         db.units.map((u) => h('option', { value: u.id }, u.name))),
       h('input', { class: 'name', list: 'dl-ing', placeholder: 'Ingrediens', 'aria-label': 'Ingrediens', value: l.ingredientId ? nameOf(db.ingredients, l.ingredientId) : '' }),
-      h('input', { class: 'note', placeholder: 'Merknad', 'aria-label': 'Merknad', value: l.note || '' }),
-      h('input', { class: 'group', placeholder: 'Gruppe', 'aria-label': 'Gruppe', value: l.group || '' }),
       h('button', { type: 'button', class: 'icon', 'aria-label': 'Fjern linje', onclick: () => row.remove() }, '×'),
     );
+    row.dataset.note = l.note || '';
+    row.dataset.group = l.group || '';
     linesBox.append(row);
   }
   (existing && existing.lines.length ? existing.lines : [{}, {}, {}]).forEach(addLine);
@@ -314,8 +309,9 @@ function renderForm(id) {
       lines.push({
         name, amount,
         unitId: row.querySelector('.unit').value,
-        note: row.querySelector('.note').value,
-        group: row.querySelector('.group').value,
+        // Merknad og gruppe er skjult i skjemaet foreløpig; eksisterende verdier beholdes.
+        note: row.dataset.note || '',
+        group: row.dataset.group || '',
       });
     }
     if (!title.value.trim()) return toast('Oppskriften må ha en tittel.', true);
@@ -365,7 +361,6 @@ function renderForm(id) {
   }
 
   app.replaceChildren(
-    h('div', { class: 'pagebar' }, h('a', { href: existing ? `#/oppskrift/${encodeURIComponent(existing.id)}` : '#/' }, existing ? '← Tilbake til oppskriften' : '← Alle retter')),
     h('form', { class: 'card form', onsubmit: onSubmit },
     h('h1', {}, existing ? 'Rediger oppskrift' : 'Ny oppskrift'),
     h('label', {}, 'Tittel', title),
@@ -386,7 +381,7 @@ function renderForm(id) {
       h('label', {}, 'Nye merkelapper (kommaseparert)', newTags)),
     h('label', {}, 'Kilde (lenke, tom hvis egen)', sourceUrl),
     h('label', {}, existing?.image ? 'Bytt bilde' : 'Bilde', imageInput),
-    h('div', { class: 'actions' },
+    h('div', { class: 'actions sticky-actions' },
       saveBtn,
       h('a', { href: existing ? `#/oppskrift/${encodeURIComponent(existing.id)}` : '#/' }, 'Avbryt'),
       existing ? h('button', { type: 'button', class: 'danger', onclick: onDelete }, 'Slett') : null),
@@ -504,7 +499,9 @@ function renderSettings() {
     try {
       const { login, canWrite } = await testConnection();
       status.replaceChildren(
-        canWrite ? `Innlogget som ${login}. Du kan lagre. ` : `Innlogget som ${login}, men nøkkelen kan bare lese. `,
+        canWrite === true ? `Innlogget som ${login}. Nøkkelen kan lagre. `
+          : canWrite === false ? `Innlogget som ${login}, men nøkkelen kan bare lese. Rediger nøkkelen på GitHub: velg «Only select repositories» → Matboksen, og sett Contents til «Read and write». `
+          : `Innlogget som ${login}. Fikk ikke sjekket om nøkkelen kan lagre; prøv å lagre noe. `,
         h('a', { href: '#/' }, 'Til oppskriftene →'));
     } catch (err) { status.textContent = err.message; }
     renderNav();

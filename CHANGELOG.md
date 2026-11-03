@@ -2,6 +2,19 @@
 
 Versjonsnummeret vises nederst i appen. Ved ny versjon: oppdater `VERSION` i `app.js`, `?v=` i `index.html` (to steder) og legg til en linje her.
 
+## 0.5.4 – 2026-11-03
+
+- Fjernet dobbel navigasjon på oppskrifter: én linje øverst («← Alle retter» og «Rediger») som blir liggende synlig når du blar.
+- Skjemaet har ikke lenger egen tilbake-lenke øverst; «Lagre» og «Avbryt» ligger fast nederst på skjermen.
+- «Egen oppskrift» vises ikke lenger; kilde vises bare når det finnes en lenke.
+- Feltene «Merknad» og «Gruppe» er fjernet fra ingredienslinjene i skjemaet. Eksisterende verdier beholdes og vises fortsatt på oppskriften. (Gruppering kommer tilbake som overskrifter i ingredienslisten.)
+- README: oppdatert veiledning for nøkkel (GitHubs nye «Add permissions»).
+
+## 0.5.3 – 2026-11-03
+
+- «Lagre og test» sjekker nå om selve nøkkelen kan lagre (før sjekket den bare om GitHub-brukeren hadde tilgang, og kunne si «Du kan lagre» selv om nøkkelen bare kunne lese).
+- Tydeligere feilmelding når nøkkelen mangler skrivetilgang, med hva som må endres på GitHub.
+
 ## 0.5.2 – 2026-11-03
 
 - Alt som ser klikkbart ut, er klikkbart: kjøkken på oppskriften, stemplene (merkelapper), kjøkkenoverskriftene i listen og navnene under Lister tar deg til listen filtrert på det du trykket.

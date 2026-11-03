@@ -15,7 +15,7 @@ Settings → Pages → *Deploy from a branch* → `main` / `/ (root)`. Etter et 
 GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → *Generate new token*:
 
 - **Repository access:** Only select repositories → `Matboksen`
-- **Permissions → Repository permissions → Contents:** Read and write
+- **Permissions:** trykk **+ Add permissions**, velg **Contents** og sett den til **Read and write** (Metadata: Read-only kommer automatisk)
 - **Expiration:** velg selv; nøkkelen må fornyes når den utløper
 
 Lim nøkkelen inn under **Innstillinger** i appen. Den lagres bare i den nettleseren og blir aldri lagt i repoet. **Lim aldri nøkkelen inn i en fil i repoet.**
