@@ -37,7 +37,6 @@ h2 { font-size: 1.15rem; color: var(--accent); margin: 1.2em 0 .4em; }
 /* ---------- toppfelt ---------- */
 .topbar { max-width: 760px; margin: 0 auto; padding: 20px 16px 8px; text-align: center; }
 .brand { display: block; padding: 10px 0; border-top: 3px double var(--ink); border-bottom: 3px double var(--ink); background: var(--paper); font: 700 2rem/1.1 var(--font-title); color: var(--ink); text-decoration: none; }
-.brand::before { content: 'FAMILIENS'; display: block; font: .8rem/1.4 var(--font-body); letter-spacing: .2em; }
 #nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 20px; margin-top: 6px; }
 #nav a { padding: 10px 0; }
 

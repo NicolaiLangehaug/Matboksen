@@ -5,7 +5,7 @@ import {
   mergeIngredients, filterRecipes, LIST_KINDS, usage, addItem, renameItem, deleteItem,
 } from './model.js';
 
-export const VERSION = '0.5.4';
+export const VERSION = '0.5.5';
 
 const app = document.getElementById('app');
 document.getElementById('version').textContent = `Matboksen ${VERSION}`;

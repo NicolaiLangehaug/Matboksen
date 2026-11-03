@@ -2,6 +2,10 @@
 
 Versjonsnummeret vises nederst i appen. Ved ny versjon: oppdater `VERSION` i `app.js`, `?v=` i `index.html` (to steder) og legg til en linje her.
 
+## 0.5.5 – 2026-11-04
+
+- Toppen viser bare «Matboksen» (fjernet «FAMILIENS»).
+
 ## 0.5.4 – 2026-11-03
 
 - Fjernet dobbel navigasjon på oppskrifter: én linje øverst («← Alle retter» og «Rediger») som blir liggende synlig når du blar.
