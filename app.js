@@ -5,7 +5,10 @@ import {
   mergeIngredients, filterRecipes, LIST_KINDS, usage, addItem, renameItem, deleteItem,
 } from './model.js';
 
+export const VERSION = '0.5.1';
+
 const app = document.getElementById('app');
+document.getElementById('version').textContent = `Matboksen ${VERSION}`;
 const nav = document.getElementById('nav');
 let db = null;
 const filters = { q: '', cuisine: '', tags: [], maxTime: '', ingredient: '' };
@@ -85,30 +88,36 @@ function renderList() {
   // Fjern filtre som peker på slettede kjøkken/merkelapper.
   if (filters.cuisine && !byId(db.cuisines, filters.cuisine)) filters.cuisine = '';
   filters.tags = filters.tags.filter((t) => byId(db.tags, t));
-  const results = h('div', { class: 'grid' });
-  const count = h('p', { class: 'muted' });
+  const results = h('div', { class: 'toc' });
+  const count = h('p', { class: 'muted count' });
+
+  function row(r) {
+    const meta = r.timeMinutes ? `${r.timeMinutes} min` : '';
+    return h('a', { class: 'toc-row', href: `#/oppskrift/${encodeURIComponent(r.id)}` },
+      h('span', { class: 'toc-title' }, r.title,
+        r.tagIds.length ? h('span', { class: 'toc-tags' }, r.tagIds.map((t) => nameOf(db.tags, t)).join(' · ')) : null),
+      h('span', { class: 'toc-leader', 'aria-hidden': 'true' }),
+      h('span', { class: 'toc-meta' }, meta));
+  }
 
   function update() {
     const list = filterRecipes(db, filters);
     count.textContent = `${list.length} av ${db.recipes.length} oppskrifter`;
-    results.replaceChildren(
-      ...list.map((r) => {
-        const img = r.image ? h('img', { alt: '', loading: 'lazy' }) : null;
-        if (r.image) setImage(img, r.image);
-        return h('a', { class: 'recipe-card', href: `#/oppskrift/${encodeURIComponent(r.id)}` },
-          img,
-          h('div', { class: 'body' },
-            h('h3', {}, r.title),
-            h('p', { class: 'muted' }, [
-              nameOf(db.cuisines, r.cuisineId),
-              r.timeMinutes ? `${r.timeMinutes} min` : '',
-            ].filter(Boolean).join(' · ')),
-            h('div', { class: 'chips' }, r.tagIds.map((t) => h('span', { class: 'chip' }, nameOf(db.tags, t))))));
-      }),
-    );
     if (!list.length) {
       results.replaceChildren(h('p', {}, db.recipes.length ? 'Ingen oppskrifter passer filtrene.' : 'Ingen oppskrifter ennå.'));
+      return;
     }
+    // Grupper på kjøkken, alfabetisk; retter uten kjøkken til slutt under «Annet».
+    const groups = new Map();
+    for (const r of list) {
+      const key = nameOf(db.cuisines, r.cuisineId) || 'Annet';
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(r);
+    }
+    const keys = [...groups.keys()].sort((a, b) => (a === 'Annet') - (b === 'Annet') || a.localeCompare(b, 'nb'));
+    results.replaceChildren(...keys.map((k) => h('section', { class: 'toc-group' },
+      h('h2', {}, k),
+      groups.get(k).map(row))));
   }
 
   const tagChips = h('div', { class: 'chips' }, db.tags
@@ -155,8 +164,12 @@ function renderRecipe(id) {
   }
   const unitName = (u) => nameOf(db.units, u);
   const src = r.source && r.source.type === 'url' ? safeUrl(r.source.url) : null;
-  const img = r.image ? h('img', { class: 'hero', alt: r.title }) : null;
-  if (img) setImage(img, r.image);
+  let photo = null;
+  if (r.image) {
+    const img = h('img', { alt: r.title });
+    setImage(img, r.image);
+    photo = h('figure', { class: 'polaroid' }, h('span', { class: 'tape', 'aria-hidden': 'true' }), img);
+  }
 
   const editHref = `#/rediger/${encodeURIComponent(r.id)}`;
   app.replaceChildren(
@@ -164,15 +177,15 @@ function renderRecipe(id) {
       h('a', { href: '#/' }, '← Alle retter'),
       h('a', { class: 'button', href: editHref }, 'Rediger')),
     h('article', { class: 'card recipe' },
-    img,
+    photo,
+    r.tagIds.length ? h('div', { class: 'stamps' }, r.tagIds.map((t) => h('span', { class: 'stamp' }, nameOf(db.tags, t)))) : null,
     h('h1', {}, r.title),
-    r.description ? h('p', {}, r.description) : null,
     h('p', { class: 'muted' }, [
       nameOf(db.cuisines, r.cuisineId),
       r.timeMinutes ? `${r.timeMinutes} min` : '',
       r.servings ? `${r.servings} porsjoner` : '',
     ].filter(Boolean).join(' · ')),
-    h('div', { class: 'chips' }, r.tagIds.map((t) => h('span', { class: 'chip' }, nameOf(db.tags, t)))),
+    r.description ? h('p', { class: 'note' }, r.description) : null,
     h('h2', {}, 'Ingredienser'),
     r.lines.length ? null : h('p', { class: 'muted' }, 'Ikke lagt inn ennå.'),
     [...groups.entries()].map(([g, lines]) => [
