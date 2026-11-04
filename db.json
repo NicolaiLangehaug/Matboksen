@@ -884,6 +884,31 @@
       "createdBy": "NicolaiLangehaug",
       "createdAt": "2026-11-03T22:00:00.000Z",
       "updatedAt": "2026-11-03T22:00:00.000Z"
+    },
+    {
+      "id": "id-q42ty",
+      "title": "Henter oppskrift …",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": null,
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "url",
+        "url": "https://www.matprat.no/oppskrifter/familien/lasagne/",
+        "site": "matprat.no",
+        "fetchedAt": "2026-11-04"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "importStatus": {
+        "state": "venter",
+        "at": "2026-11-04T07:26:11.387Z"
+      },
+      "createdAt": "2026-11-04T07:26:11.823Z",
+      "updatedAt": "2026-11-04T07:26:11.823Z"
     }
   ]
 }
