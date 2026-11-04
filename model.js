@@ -81,7 +81,7 @@ export function upsertRecipe(db, form, now = new Date().toISOString(), login = '
   const url = safeUrl(form.sourceUrl);
   const rec = {
     id: form.id,
-    title: form.title.trim(),
+    title: form.title.trim() || (url ? 'Henter oppskrift …' : 'Uten navn'),
     description: (form.description || '').trim(),
     servings: form.servings || null,
     timeMinutes: form.timeMinutes || null,
@@ -94,6 +94,7 @@ export function upsertRecipe(db, form, now = new Date().toISOString(), login = '
       ? { type: 'url', url, site: siteOf(url), fetchedAt: prev?.source?.url === url ? prev.source.fetchedAt : now.slice(0, 10) }
       : { type: 'egen' },
     createdBy: prev ? prev.createdBy : login,
+    importStatus: form.importStatus || undefined,
     createdAt: prev ? prev.createdAt : now,
     updatedAt: now,
   };

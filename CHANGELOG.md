@@ -2,6 +2,14 @@
 
 Versjonsnummeret vises nederst i appen. Ved ny versjon: oppdater `VERSION` i `app.js`, `?v=` i `index.html` (to steder) og legg til en linje her.
 
+## 0.5.6 – 2026-11-04
+
+- Henting fra lenke: lim inn en lenke (f.eks. matprat.no) på en ny eller tom rett og trykk Lagre. Ingredienser (mengde, enhet, ingrediens), fremgangsmåte, porsjoner, tid og bilde hentes og lagres i db.json. Alt kan redigeres etterpå.
+- «Hent fra lenken» / «Hent på nytt fra lenken» ved kilden på oppskriften.
+- Statuslinje på oppskriften mens den hentes, og melding om resultat eller feil.
+- Lenkefeltet ligger nå øverst i skjemaet; tittel kan stå tom når det er lenke.
+- Nye filer: import_recipe.py (leser oppskriften) og .github/workflows/import.yml (GitHub Actions som kjører den).
+
 ## 0.5.5 – 2026-11-04
 
 - Toppen viser bare «Matboksen» (fjernet «FAMILIENS»).

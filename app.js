@@ -1,11 +1,11 @@
-import { load, save, uploadImage, imageUrl, settings, saveSettings, hasToken, testConnection } from './store.js';
+import { load, save, uploadImage, imageUrl, settings, saveSettings, hasToken, testConnection, requestImport } from './store.js';
 import { downscale } from './image.js';
 import {
   byId, newId, parseAmount, formatAmount, safeUrl, upsertRecipe, deleteRecipe,
   mergeIngredients, filterRecipes, LIST_KINDS, usage, addItem, renameItem, deleteItem,
 } from './model.js';
 
-export const VERSION = '0.5.5';
+export const VERSION = '0.5.6';
 
 const app = document.getElementById('app');
 document.getElementById('version').textContent = `Matboksen ${VERSION}`;
@@ -75,7 +75,9 @@ function setImage(img, path) {
 }
 
 // ---------- ruting ----------
+let pollTimer = null;
 async function route() {
+  clearTimeout(pollTimer);
   renderNav();
   const [, page, id, extra] = (location.hash || '#/').split('/');
   try {
@@ -206,10 +208,49 @@ function renderRecipe(id) {
   }
 
   const editHref = `#/rediger/${encodeURIComponent(r.id)}`;
+  const site = (r.source && r.source.site) || 'nettsiden';
+  const st = r.importStatus;
+  const hasContent = r.lines.length || r.steps.length;
+
+  async function startImport() {
+    if (hasContent && !confirm(`Erstatte ingredienser og fremgangsmåte med det som står på ${site}?`)) return;
+    try {
+      const at = new Date().toISOString();
+      const res = await save((d) => { const x = byId(d.recipes, r.id); if (x) x.importStatus = { state: 'venter', at }; }, `Henter oppskrift: ${r.title}`);
+      db = res.db;
+      await requestImport(r.id, src, !!hasContent);
+      renderRecipe(r.id);
+    } catch (err) { toast(err.message, true); }
+  }
+
+  let banner = null;
+  if (st && st.state === 'venter') {
+    const waited = Date.now() - Date.parse(st.at);
+    banner = h('div', { class: 'banner wait', role: 'status' },
+      waited > 4 * 60 * 1000
+        ? [h('strong', {}, 'Dette tar lang tid. '), 'Sjekk under «Actions» i repoet på GitHub at «Hent oppskrift fra lenke» har kjørt. ',
+           h('button', { type: 'button', class: 'link', onclick: () => route() }, 'Sjekk igjen')]
+        : [h('span', { class: 'spinner', 'aria-hidden': 'true' }), `Henter ingredienser og fremgangsmåte fra ${site} … Det tar vanligvis under ett minutt.`]);
+    if (hasToken() && waited <= 4 * 60 * 1000) {
+      pollTimer = setTimeout(async () => {
+        if (!location.hash.startsWith(`#/oppskrift/${encodeURIComponent(r.id)}`)) return;
+        try { db = await load(); } catch { /* prøv igjen neste runde */ }
+        renderRecipe(r.id);
+      }, 5000);
+    }
+  } else if (st && st.state === 'feil') {
+    banner = h('div', { class: 'banner error', role: 'alert' }, h('strong', {}, 'Klarte ikke å hente oppskriften. '), st.message || '',
+      ' ', src && hasToken() ? h('button', { type: 'button', class: 'link', onclick: startImport }, 'Prøv igjen') : null);
+  } else if (st && st.state === 'ok') {
+    banner = h('div', { class: 'banner ok', role: 'status' }, st.message || 'Oppskriften er hentet.',
+      ' Se over at ingrediensene ble riktige, og trykk ', h('a', { href: editHref }, 'Rediger'), ' for å rette.');
+  }
+
   app.replaceChildren(
     h('div', { class: 'pagebar' },
       h('a', { href: '#/' }, '← Alle retter'),
       h('a', { class: 'button', href: editHref }, 'Rediger')),
+    banner,
     h('article', { class: 'card recipe' },
     photo,
     r.tagIds.length ? h('div', { class: 'stamps' }, r.tagIds.map((t) => h('a', { class: 'stamp', href: filterHref('merkelapp', t), 'aria-label': `Alle retter merket ${nameOf(db.tags, t)}` }, nameOf(db.tags, t)))) : null,
@@ -234,7 +275,8 @@ function renderRecipe(id) {
     ]),
     h('h2', {}, 'Slik gjør du'),
     r.steps.length ? h('ol', { class: 'steps' }, r.steps.map((s) => h('li', {}, s))) : h('p', { class: 'muted' }, 'Ikke lagt inn ennå.'),
-    src ? h('p', { class: 'muted' }, 'Kilde: ', h('a', { href: src, target: '_blank', rel: 'noopener noreferrer' }, r.source.site || src)) : null,
+    src ? h('p', { class: 'muted source' }, 'Kilde: ', h('a', { href: src, target: '_blank', rel: 'noopener noreferrer' }, r.source.site || src),
+      hasToken() && !(st && st.state === 'venter') ? [' · ', h('button', { type: 'button', class: 'link', onclick: startImport }, hasContent ? 'Hent på nytt fra lenken' : 'Hent fra lenken')] : null) : null,
     ),
   );
 }
@@ -260,7 +302,7 @@ function renderForm(id) {
   const selectedTags = new Set(existing ? existing.tagIds : []);
   let imageFile = null;
 
-  const title = h('input', { required: true, value: existing?.title || '' });
+  const title = h('input', { value: existing && !existing.title.startsWith('Henter oppskrift') ? existing.title : '', placeholder: 'Fylles ut fra lenken hvis tom' });
   const description = h('textarea', { rows: 2, value: existing?.description || '' });
   const servings = h('input', { type: 'number', min: 1, inputmode: 'numeric', value: existing?.servings ?? '' });
   const time = h('input', { type: 'number', min: 1, inputmode: 'numeric', value: existing?.timeMinutes ?? '' });
@@ -314,7 +356,12 @@ function renderForm(id) {
         group: row.dataset.group || '',
       });
     }
-    if (!title.value.trim()) return toast('Oppskriften må ha en tittel.', true);
+    const url = safeUrl(sourceUrl.value.trim());
+    if (sourceUrl.value.trim() && !url) return toast('Lenken må starte med http:// eller https://', true);
+    if (!title.value.trim() && !url) return toast('Skriv en tittel, eller lim inn en lenke til oppskriften.', true);
+    const stepList = steps.value.split('\n').map((x) => x.trim()).filter(Boolean);
+    // Lenke + ingen ingredienser og ingen fremgangsmåte => hent automatisk fra lenken.
+    const autoImport = !!url && !lines.length && !stepList.length;
 
     saveBtn.disabled = true;
     saveBtn.textContent = 'Lagrer …';
@@ -332,8 +379,8 @@ function renderForm(id) {
         lines,
         steps: steps.value.split('\n'),
         sourceUrl: sourceUrl.value,
+        importStatus: autoImport ? { state: 'venter', at: new Date().toISOString() } : undefined,
       };
-      if (sourceUrl.value.trim() && !safeUrl(sourceUrl.value.trim())) throw new Error('Kildelenken må starte med http:// eller https://');
       if (imageFile) {
         const { blob, ext } = await downscale(imageFile);
         form.image = await uploadImage(`images/${id}-${Date.now()}.${ext}`, blob);
@@ -341,7 +388,13 @@ function renderForm(id) {
       const s = settings();
       const res = await save((d) => upsertRecipe(d, form, new Date().toISOString(), s.login), `${recipeId ? 'Endret' : 'Ny'} oppskrift: ${form.title.trim()}`);
       db = res.db;
-      toast('Lagret.');
+      if (autoImport) {
+        try { await requestImport(id, url, false); toast('Lagret. Henter fra lenken …'); }
+        catch (err) {
+          await save((d) => { const x = byId(d.recipes, id); if (x) x.importStatus = { state: 'feil', at: new Date().toISOString(), message: err.message }; }, 'Henting feilet').then((r2) => { db = r2.db; }).catch(() => {});
+          toast(err.message, true);
+        }
+      } else toast('Lagret.');
       location.hash = `#/oppskrift/${encodeURIComponent(id)}`;
     } catch (err) {
       toast(err.message, true);
@@ -363,6 +416,8 @@ function renderForm(id) {
   app.replaceChildren(
     h('form', { class: 'card form', onsubmit: onSubmit },
     h('h1', {}, existing ? 'Rediger oppskrift' : 'Ny oppskrift'),
+    h('label', {}, 'Lenke til oppskriften (valgfritt)', sourceUrl,
+      h('span', { class: 'hint' }, 'Er ingrediensene og fremgangsmåten tomme, hentes de fra lenken når du lagrer.')),
     h('label', {}, 'Tittel', title),
     h('label', {}, 'Kort beskrivelse', description),
     h('div', { class: 'row' },
@@ -379,7 +434,6 @@ function renderForm(id) {
     h('fieldset', {}, h('legend', {}, 'Merkelapper'),
       tagBox,
       h('label', {}, 'Nye merkelapper (kommaseparert)', newTags)),
-    h('label', {}, 'Kilde (lenke, tom hvis egen)', sourceUrl),
     h('label', {}, existing?.image ? 'Bytt bilde' : 'Bilde', imageInput),
     h('div', { class: 'actions sticky-actions' },
       saveBtn,

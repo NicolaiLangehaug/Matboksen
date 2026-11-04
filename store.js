@@ -144,6 +144,22 @@ export async function uploadImage(path, blob) {
   return path;
 }
 
+// Bestill henting av oppskrift fra lenke. GitHub Actions (import.yml) plukker
+// opp filen, henter siden og fyller retten i db.json.
+export async function requestImport(recipeId, url, replace = false) {
+  const s = settings();
+  const path = `imports/${recipeId}-${Date.now()}.json`;
+  const res = await gh(`/contents/${path}`, {
+    method: 'PUT',
+    body: {
+      message: `Hent oppskrift fra lenke: ${url}`,
+      content: textToB64(JSON.stringify({ recipeId, url, replace, requestedBy: s.login || '' }, null, 2) + '\n'),
+      branch: s.branch,
+    },
+  });
+  if (!res.ok) throw new StoreError(explain(res, true), res.status);
+}
+
 // Bilde-URL. Med nøkkel hentes bildet via API (fungerer også for privat repo
 // og før Pages har publisert det). Uten nøkkel: relativ sti på Pages.
 const imageCache = new Map();

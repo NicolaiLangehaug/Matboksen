@@ -22,6 +22,16 @@ Lim nøkkelen inn under **Innstillinger** i appen. Den lagres bare i den nettles
 
 Personer som bare skal lese, trenger ingen nøkkel så lenge Pages er offentlig. Er repoet privat og uten Pages, trenger også de en nøkkel, med *Contents: Read-only*.
 
+### 3. Slå på henting fra lenke (én gang)
+
+Henting fra lenke kjøres av GitHub Actions, fordi en nettside ikke får hente innhold fra andre nettsteder selv.
+
+1. Last opp `import_recipe.py` til roten av repoet.
+2. Trykk **Add file → Create new file**. Skriv navnet `.github/workflows/import.yml` (skråstrekene lager mappene), lim inn innholdet fra filen med samme navn, og trykk **Commit changes**.
+3. Ferdig. Nøkkelen trenger ingen ekstra tilgang.
+
+Slik brukes det: lim inn en lenke på en ny eller tom rett og trykk **Lagre**. Etter under ett minutt er ingredienser, fremgangsmåte, porsjoner, tid og bilde lagt inn. Hver henting vises under fanen **Actions** i repoet; der ser du også feil hvis noe går galt. Fungerer for sider som har strukturerte oppskriftsdata (schema.org Recipe), som de fleste store oppskriftssider har.
+
 ## Slik er dataene bygget opp
 
 Alt ligger i `db.json`:
