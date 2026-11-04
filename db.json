@@ -1058,6 +1058,31 @@
       },
       "createdAt": "2026-11-04T07:26:11.823Z",
       "updatedAt": "2026-11-04T07:26:23.000Z"
+    },
+    {
+      "id": "id-f6olx",
+      "title": "Henter oppskrift …",
+      "description": "",
+      "servings": null,
+      "timeMinutes": null,
+      "cuisineId": null,
+      "tagIds": [],
+      "lines": [],
+      "steps": [],
+      "image": null,
+      "source": {
+        "type": "url",
+        "url": "https://www.matprat.no/oppskrifter/gjester/quiche-lorraine/",
+        "site": "matprat.no",
+        "fetchedAt": "2026-11-04"
+      },
+      "createdBy": "NicolaiLangehaug",
+      "importStatus": {
+        "state": "venter",
+        "at": "2026-11-04T16:56:25.987Z"
+      },
+      "createdAt": "2026-11-04T16:56:26.629Z",
+      "updatedAt": "2026-11-04T16:56:26.629Z"
     }
   ]
 }
