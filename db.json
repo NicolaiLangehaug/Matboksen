@@ -157,6 +157,41 @@
       "id": "revet-hvitost-til-toppen-qpk7x",
       "name": "Revet hvitost til toppen",
       "aliases": []
+    },
+    {
+      "id": "romtemperert-smor-5ehfr",
+      "name": "Romtemperert smør",
+      "aliases": []
+    },
+    {
+      "id": "vann-6xcz3",
+      "name": "Vann",
+      "aliases": []
+    },
+    {
+      "id": "bacon-p651h",
+      "name": "Bacon",
+      "aliases": []
+    },
+    {
+      "id": "egg-on6xt",
+      "name": "Egg",
+      "aliases": []
+    },
+    {
+      "id": "kremflote-8fshs",
+      "name": "Kremfløte",
+      "aliases": []
+    },
+    {
+      "id": "pepper-lyxkn",
+      "name": "Pepper",
+      "aliases": []
+    },
+    {
+      "id": "revet-hvitost-ejcfm",
+      "name": "Revet hvitost",
+      "aliases": []
     }
   ],
   "cuisines": [
@@ -1061,15 +1096,86 @@
     },
     {
       "id": "id-f6olx",
-      "title": "Henter oppskrift …",
-      "description": "",
-      "servings": null,
-      "timeMinutes": null,
+      "title": "Quiche Lorraine",
+      "description": "Quiche lorraine er kanskje den mest kjente av alle salte paier. Fylt med bacon, purre, ost og egg er den i all sin enkelhet en rett full av smak. Middels vanskelighetsgrad",
+      "servings": 4,
+      "timeMinutes": 80,
       "cuisineId": null,
       "tagIds": [],
-      "lines": [],
-      "steps": [],
-      "image": null,
+      "lines": [
+        {
+          "ingredientId": "romtemperert-smor-5ehfr",
+          "amount": 100,
+          "unitId": "g",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "hvetemel-q716e",
+          "amount": 150,
+          "unitId": "g",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "vann-6xcz3",
+          "amount": 0.5,
+          "unitId": "dl",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "bacon-p651h",
+          "amount": 150,
+          "unitId": "g",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "egg-on6xt",
+          "amount": 4,
+          "unitId": "stk",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "melk-68wm8",
+          "amount": 2,
+          "unitId": "dl",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "kremflote-8fshs",
+          "amount": 2,
+          "unitId": "dl",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "pepper-lyxkn",
+          "amount": 0.5,
+          "unitId": "ts",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "revet-hvitost-ejcfm",
+          "amount": 100,
+          "unitId": "g",
+          "note": "",
+          "group": ""
+        }
+      ],
+      "steps": [
+        "Smuldre smør og mel. Tilsett kaldt vann og lag en jevn deig. La deigen stå kaldt i ca. 30 minutter.",
+        "Trykk deigen ut i en paiform (ca. 25 cm i diameter) og prikk den med en gaffel. Stek bunnen ved 200 °C i ca. 10 minutter til den er litt gyllen.",
+        "Kutt bacon i mindre biter, og stek det i en varm stekepanne til det er gyllent og sprøtt. Legg baconet over på et kjøkkenpapir, slik at fettet renner av.",
+        "Visp sammen egg, melk, fløte og pepper.",
+        "Ha stekt bacon over i paiskallet, hell på eggeblandingen og topp med revet ost.",
+        "Stek paien videre på 180 °C i ca. 25 minutter til eggblandingen er stiv."
+      ],
+      "image": "images/id-f6olx-import.webp",
       "source": {
         "type": "url",
         "url": "https://www.matprat.no/oppskrifter/gjester/quiche-lorraine/",
@@ -1078,11 +1184,12 @@
       },
       "createdBy": "NicolaiLangehaug",
       "importStatus": {
-        "state": "venter",
-        "at": "2026-11-04T16:56:25.987Z"
+        "state": "ok",
+        "at": "2026-11-04T16:56:40.000Z",
+        "message": "Hentet 9 ingredienser, 6 steg, bilde fra matprat.no."
       },
       "createdAt": "2026-11-04T16:56:26.629Z",
-      "updatedAt": "2026-11-04T16:56:26.629Z"
+      "updatedAt": "2026-11-04T16:56:40.000Z"
     }
   ]
 }
