@@ -61,7 +61,10 @@ export function siteOf(u) {
 
 // Lagre (opprett eller oppdater) en oppskrift fra skjemadata. Kjøres på fersk db.
 export function upsertRecipe(db, form, now = new Date().toISOString(), login = '') {
-  const cuisineId = form.cuisine && form.cuisine.trim() ? ensure(db.cuisines, form.cuisine) : null;
+  // Kjøkken velges fra listen (cuisineId). Navn (cuisine) støttes fortsatt for eldre kall.
+  const cuisineId = form.cuisineId !== undefined
+    ? (form.cuisineId && byId(db.cuisines, form.cuisineId) ? form.cuisineId : null)
+    : (form.cuisine && form.cuisine.trim() ? ensure(db.cuisines, form.cuisine) : null);
   const tagIds = [];
   for (const id of form.tagIds || []) if (byId(db.tags, id) && !tagIds.includes(id)) tagIds.push(id);
   for (const name of form.newTags || []) {

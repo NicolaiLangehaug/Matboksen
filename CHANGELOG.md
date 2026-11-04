@@ -2,6 +2,13 @@
 
 Versjonsnummeret vises nederst i appen. Ved ny versjon: oppdater `VERSION` i `app.js`, `?v=` i `index.html` (to steder) og legg til en linje her.
 
+## 0.5.7 – 2026-11-04
+
+- Ingredienslinjer kan flyttes opp og ned (↑ ↓), så ingredienser som hører sammen kan samles. Rekkefølgen lagres.
+- Kjøkken velges fra en liste i skjemaet og er flyttet ned ved merkelappene. Nye kjøkken legges til under Lister.
+- Polaroid: ekte proporsjoner med bred stripe nederst der den korte beskrivelsen står håndskrevet, mykere skygge, glattere skrå kant og varmere fargetone.
+- Rettet: teksten «null» ble vist over oppskrifter uten hentestatus (feil fra 0.5.6).
+
 ## 0.5.6 – 2026-11-04
 
 - Henting fra lenke: lim inn en lenke (f.eks. matprat.no) på en ny eller tom rett og trykk Lagre. Ingredienser (mengde, enhet, ingrediens), fremgangsmåte, porsjoner, tid og bilde hentes og lagres i db.json. Alt kan redigeres etterpå.

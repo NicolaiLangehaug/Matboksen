@@ -90,9 +90,10 @@ button.icon { background: none; border: 0; color: var(--muted); font-size: 1.5re
 .pagebar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
 .pagebar a:not(.button) { padding: 10px 0; }
 .recipe { position: relative; }
-.polaroid { position: relative; width: min(280px, 80%); margin: 12px 0 20px 8px; padding: 10px 10px 32px; background: #FFFFFF; box-shadow: 0 3px 8px rgba(46,42,36,.25); transform: rotate(-2.5deg); }
-.polaroid img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
-.polaroid .tape { position: absolute; top: -10px; left: 50%; width: 80px; height: 22px; margin-left: -40px; background: rgba(226,206,150,.85); transform: rotate(4deg); }
+.polaroid { position: relative; width: min(320px, 86%); margin: 18px 0 26px 6px; padding: 14px 14px 0; background: #FDFBF6; box-shadow: 0 1px 2px rgba(46,42,36,.10), 0 8px 18px -6px rgba(46,42,36,.28); transform: rotate(-1.5deg); backface-visibility: hidden; outline: 1px solid transparent; }
+.polaroid img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border: 1px solid rgba(46,42,36,.08); filter: saturate(.9) contrast(1.04) sepia(.08); }
+.polaroid figcaption { padding: 10px 4px 16px; min-height: 2.6em; text-align: center; font: 600 1.5rem/1.15 var(--font-hand); color: #2A4F8C; overflow-wrap: anywhere; }
+.polaroid .tape { position: absolute; top: -12px; left: 50%; z-index: 1; width: 96px; height: 26px; margin-left: -48px; background: rgba(232,214,162,.78); box-shadow: 0 1px 1px rgba(0,0,0,.06); transform: rotate(3deg); }
 .stamps { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 8px; }
 .stamp { padding: 3px 10px; border: 3px solid var(--accent); border-radius: 6px; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; font-size: .85rem; transform: rotate(-4deg); }
 .stamp:nth-child(even) { transform: rotate(3deg); }
@@ -104,14 +105,21 @@ button.icon { background: none; border: 0; color: var(--muted); font-size: 1.5re
 .steps li { margin-bottom: 8px; }
 
 /* ---------- ingredienslinjer i skjema ---------- */
-.lines .line { display: grid; grid-template-columns: 1fr 1fr 44px; gap: 6px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--rule); }
+/* Mobil: [↑][ingrediens      ][×]
+          [↓][mengde][enhet ]      */
+.lines .line { display: grid; grid-template-columns: 44px 1fr 1fr 44px; gap: 6px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed var(--rule); }
 .lines .line input, .lines .line select { margin: 0; min-width: 0; }
-.lines .line .name { grid-column: 1 / 3; grid-row: 1; }
-.lines .line .icon { grid-column: 3; grid-row: 1; }
-.lines .line .amount { grid-column: 1; grid-row: 2; }
-.lines .line .unit { grid-column: 2; grid-row: 2; }
+.lines .line .up { grid-column: 1; grid-row: 1; }
+.lines .line .down { grid-column: 1; grid-row: 2; }
+.lines .line .name { grid-column: 2 / 4; grid-row: 1; }
+.lines .line .remove { grid-column: 4; grid-row: 1; }
+.lines .line .amount { grid-column: 2; grid-row: 2; }
+.lines .line .unit { grid-column: 3; grid-row: 2; }
+.lines .line .move { font-size: 1.2rem; color: var(--ink); border: 1px solid var(--rule); background: #FFFDF7; padding: 0; }
+.lines .line .move:hover:not(:disabled) { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.lines .line .move:disabled { opacity: .3; }
 @media (min-width: 760px) {
-  .lines .line { grid-template-columns: 110px 90px 1fr 44px; border: 0; padding: 0; }
+  .lines .line { grid-template-columns: 44px 44px 110px 90px 1fr 44px; border: 0; padding: 0; }
   .lines .line > * { grid-column: auto !important; grid-row: auto !important; }
 }
 

@@ -5,7 +5,7 @@ import {
   mergeIngredients, filterRecipes, LIST_KINDS, usage, addItem, renameItem, deleteItem,
 } from './model.js';
 
-export const VERSION = '0.5.6';
+export const VERSION = '0.5.7';
 
 const app = document.getElementById('app');
 document.getElementById('version').textContent = `Matboksen ${VERSION}`;
@@ -48,6 +48,11 @@ function h(tag, attrs, ...children) {
   return el;
 }
 
+// Som el.replaceChildren, men hopper over null/false (ellers vises teksten «null»).
+function put(el, ...children) {
+  el.replaceChildren(...children.flat(Infinity).filter((c) => c != null && c !== false));
+}
+
 function toast(msg, isError = false) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -63,7 +68,7 @@ function datalist(id, items) {
 }
 
 function renderNav() {
-  nav.replaceChildren(
+  put(nav, 
     h('a', { href: '#/ny' }, 'Ny oppskrift'),
     h('a', { href: '#/lister' }, 'Lister'),
     h('a', { href: '#/innstillinger' }, 'Innstillinger'),
@@ -90,7 +95,7 @@ async function route() {
     if (page === 'lister' || page === 'ingredienser') return renderLists();
     return renderList();
   } catch (e) {
-    app.replaceChildren(
+    put(app, 
       h('div', { class: 'card' },
         h('h2', {}, 'Fikk ikke lastet data'),
         h('p', {}, e.message),
@@ -128,7 +133,7 @@ function renderList() {
     if (filters.cuisine) items.push(chip(`Kjøkken: ${nameOf(db.cuisines, filters.cuisine)}`, () => (filters.cuisine = '')));
     for (const t of filters.tags) items.push(chip(`Merkelapp: ${nameOf(db.tags, t)}`, () => (filters.tags = filters.tags.filter((x) => x !== t))));
     if (filters.ingredient) items.push(chip(`Ingrediens: ${filters.ingredient}`, () => (filters.ingredient = '')));
-    active.replaceChildren(...(items.length ? [h('span', { class: 'label' }, 'Viser kun:'), ...items] : []));
+    put(active, ...(items.length ? [h('span', { class: 'label' }, 'Viser kun:'), ...items] : []));
   }
 
   function update() {
@@ -136,7 +141,7 @@ function renderList() {
     const list = filterRecipes(db, filters);
     count.textContent = `${list.length} av ${db.recipes.length} oppskrifter`;
     if (!list.length) {
-      results.replaceChildren(db.recipes.length
+      put(results, db.recipes.length
         ? h('p', {}, 'Ingen oppskrifter passer filtrene. ',
             h('button', { type: 'button', class: 'link', onclick: () => { Object.assign(filters, emptyFilters()); renderList(); } }, 'Vis alle'))
         : h('p', {}, 'Ingen oppskrifter ennå. ', h('a', { href: '#/ny' }, 'Legg til den første')));
@@ -150,7 +155,7 @@ function renderList() {
       groups.get(key).push(r);
     }
     const keys = [...groups.keys()].sort((a, b) => (a === 'Annet') - (b === 'Annet') || a.localeCompare(b, 'nb'));
-    results.replaceChildren(...keys.map((k) => h('section', { class: 'toc-group' },
+    put(results, ...keys.map((k) => h('section', { class: 'toc-group' },
       h('h2', {}, k === 'Annet' || filters.cuisine ? k
         : h('a', { href: filterHref('kjokken', groups.get(k)[0].cuisineId), 'aria-label': `Vis bare ${k}` }, k)),
       groups.get(k).map(row))));
@@ -184,14 +189,14 @@ function renderList() {
     }, 'Nullstill filtre'),
   );
 
-  app.replaceChildren(panel, active, count, results);
+  put(app, panel, active, count, results);
   update();
 }
 
 // ---------- vis oppskrift ----------
 function renderRecipe(id) {
   const r = byId(db.recipes, decodeURIComponent(id || ''));
-  if (!r) { app.replaceChildren(h('p', {}, 'Fant ikke oppskriften.')); return; }
+  if (!r) { put(app, h('p', {}, 'Fant ikke oppskriften.')); return; }
 
   const groups = new Map();
   for (const l of r.lines) {
@@ -204,7 +209,8 @@ function renderRecipe(id) {
   if (r.image) {
     const img = h('img', { alt: r.title });
     setImage(img, r.image);
-    photo = h('figure', { class: 'polaroid' }, h('span', { class: 'tape', 'aria-hidden': 'true' }), img);
+    photo = h('figure', { class: 'polaroid' }, h('span', { class: 'tape', 'aria-hidden': 'true' }), img,
+      r.description ? h('figcaption', {}, r.description) : h('figcaption', { 'aria-hidden': 'true' }));
   }
 
   const editHref = `#/rediger/${encodeURIComponent(r.id)}`;
@@ -246,7 +252,7 @@ function renderRecipe(id) {
       ' Se over at ingrediensene ble riktige, og trykk ', h('a', { href: editHref }, 'Rediger'), ' for å rette.');
   }
 
-  app.replaceChildren(
+  put(app, 
     h('div', { class: 'pagebar' },
       h('a', { href: '#/' }, '← Alle retter'),
       h('a', { class: 'button', href: editHref }, 'Rediger')),
@@ -263,7 +269,7 @@ function renderRecipe(id) {
         r.timeMinutes ? `${r.timeMinutes} min` : null,
         r.servings ? `${r.servings} porsjoner` : null,
       ].filter(Boolean).flatMap((x, i) => (i ? [' · ', x] : [x]))),
-    r.description ? h('p', { class: 'note' }, r.description) : null,
+    r.description && !photo ? h('p', { class: 'note' }, r.description) : null,
     h('h2', {}, 'Ingredienser'),
     r.lines.length ? null : h('p', { class: 'muted' }, 'Ikke lagt inn ennå.'),
     [...groups.entries()].map(([g, lines]) => [
@@ -284,7 +290,7 @@ function renderRecipe(id) {
 // ---------- skjema ----------
 function renderForm(id) {
   if (!hasToken()) {
-    app.replaceChildren(h('section', { class: 'card' },
+    put(app, h('section', { class: 'card' },
       h('h1', {}, 'Du trenger en nøkkel for å redigere'),
       h('p', {}, 'Alle kan lese oppskriftene, men for å legge til og endre må appen få lov til å lagre i GitHub. Det gjør du én gang per telefon eller PC:'),
       h('ol', {},
@@ -296,7 +302,7 @@ function renderForm(id) {
     return;
   }
   const existing = id ? byId(db.recipes, decodeURIComponent(id)) : null;
-  if (id && !existing) { app.replaceChildren(h('p', {}, 'Fant ikke oppskriften.')); return; }
+  if (id && !existing) { put(app, h('p', {}, 'Fant ikke oppskriften.')); return; }
 
   const recipeId = existing ? existing.id : null;
   const selectedTags = new Set(existing ? existing.tagIds : []);
@@ -306,25 +312,46 @@ function renderForm(id) {
   const description = h('textarea', { rows: 2, value: existing?.description || '' });
   const servings = h('input', { type: 'number', min: 1, inputmode: 'numeric', value: existing?.servings ?? '' });
   const time = h('input', { type: 'number', min: 1, inputmode: 'numeric', value: existing?.timeMinutes ?? '' });
-  const cuisine = h('input', { list: 'dl-cuisine', value: existing ? nameOf(db.cuisines, existing.cuisineId) : '' });
+  const cuisine = h('select', { value: existing && byId(db.cuisines, existing.cuisineId) ? existing.cuisineId : '' },
+    h('option', { value: '' }, 'Ikke valgt'),
+    db.cuisines.slice().sort((a, b) => a.name.localeCompare(b.name, 'nb')).map((c) => h('option', { value: c.id }, c.name)));
   const newTags = h('input', { placeholder: 'f.eks. hverdag, sunn' });
   const steps = h('textarea', { rows: 8, value: existing ? existing.steps.join('\n') : '' });
   const sourceUrl = h('input', { type: 'url', placeholder: 'https://…', value: existing?.source?.url || '' });
   const imageInput = h('input', { type: 'file', accept: 'image/*', onchange: (e) => { imageFile = e.target.files[0] || null; } });
 
   const linesBox = h('div', { class: 'lines' });
+  // Slå av «opp» på første og «ned» på siste linje.
+  function refreshMoves() {
+    const rows = [...linesBox.querySelectorAll('.line')];
+    rows.forEach((r, i) => {
+      r.querySelector('.up').disabled = i === 0;
+      r.querySelector('.down').disabled = i === rows.length - 1;
+    });
+  }
+  function move(row, dir) {
+    const sib = dir < 0 ? row.previousElementSibling : row.nextElementSibling;
+    if (!sib) return;
+    if (dir < 0) sib.before(row); else sib.after(row);
+    refreshMoves();
+    const btn = row.querySelector(dir < 0 ? '.up' : '.down');
+    (btn.disabled ? row.querySelector(dir < 0 ? '.down' : '.up') : btn).focus();
+  }
   function addLine(l = {}) {
     const row = h('div', { class: 'line' },
+      h('button', { type: 'button', class: 'icon move up', 'aria-label': 'Flytt opp', title: 'Flytt opp', onclick: () => move(row, -1) }, '↑'),
+      h('button', { type: 'button', class: 'icon move down', 'aria-label': 'Flytt ned', title: 'Flytt ned', onclick: () => move(row, 1) }, '↓'),
       h('input', { class: 'amount', inputmode: 'decimal', placeholder: 'Mengde', 'aria-label': 'Mengde', value: formatAmount(l.amount) }),
       h('select', { class: 'unit', 'aria-label': 'Enhet', value: l.unitId || '' },
         h('option', { value: '' }, '–'),
         db.units.map((u) => h('option', { value: u.id }, u.name))),
       h('input', { class: 'name', list: 'dl-ing', placeholder: 'Ingrediens', 'aria-label': 'Ingrediens', value: l.ingredientId ? nameOf(db.ingredients, l.ingredientId) : '' }),
-      h('button', { type: 'button', class: 'icon', 'aria-label': 'Fjern linje', onclick: () => row.remove() }, '×'),
+      h('button', { type: 'button', class: 'icon remove', 'aria-label': 'Fjern linje', onclick: () => { row.remove(); refreshMoves(); } }, '×'),
     );
     row.dataset.note = l.note || '';
     row.dataset.group = l.group || '';
     linesBox.append(row);
+    refreshMoves();
   }
   (existing && existing.lines.length ? existing.lines : [{}, {}, {}]).forEach(addLine);
 
@@ -373,7 +400,7 @@ function renderForm(id) {
         description: description.value,
         servings: Number(servings.value) || null,
         timeMinutes: Number(time.value) || null,
-        cuisine: cuisine.value,
+        cuisineId: cuisine.value,
         tagIds: [...selectedTags],
         newTags: newTags.value.split(','),
         lines,
@@ -413,7 +440,7 @@ function renderForm(id) {
     } catch (err) { toast(err.message, true); }
   }
 
-  app.replaceChildren(
+  put(app, 
     h('form', { class: 'card form', onsubmit: onSubmit },
     h('h1', {}, existing ? 'Rediger oppskrift' : 'Ny oppskrift'),
     h('label', {}, 'Lenke til oppskriften (valgfritt)', sourceUrl,
@@ -422,15 +449,15 @@ function renderForm(id) {
     h('label', {}, 'Kort beskrivelse', description),
     h('div', { class: 'row' },
       h('label', {}, 'Porsjoner', servings),
-      h('label', {}, 'Tid (min)', time),
-      h('label', {}, 'Kjøkken', cuisine)),
-    datalist('dl-cuisine', db.cuisines),
+      h('label', {}, 'Tid (min)', time)),
     h('fieldset', {}, h('legend', {}, 'Ingredienser'),
-      h('p', { class: 'muted' }, 'Velg fra listen eller skriv en ny ingrediens. Mengde kan være 1,5 eller 1/2.'),
+      h('p', { class: 'muted' }, 'Velg fra listen eller skriv en ny ingrediens. Mengde kan være 1,5 eller 1/2. Bruk ↑ ↓ for å samle ingredienser som hører sammen, for eksempel det som blir sausen.'),
       linesBox,
       h('button', { type: 'button', class: 'secondary', onclick: () => addLine() }, '+ Legg til linje'),
       datalist('dl-ing', db.ingredients)),
     h('label', {}, 'Fremgangsmåte (ett steg per linje)', steps),
+    h('label', {}, 'Kjøkken', cuisine,
+      h('span', { class: 'hint' }, 'Mangler kjøkkenet? Legg det til under ', h('a', { href: '#/lister' }, 'Lister'), '.')),
     h('fieldset', {}, h('legend', {}, 'Merkelapper'),
       tagBox,
       h('label', {}, 'Nye merkelapper (kommaseparert)', newTags)),
@@ -527,7 +554,7 @@ function listSection(kind) {
 }
 
 function renderLists() {
-  app.replaceChildren(
+  put(app, 
     h('h1', {}, 'Lister'),
     h('nav', { class: 'chips' },
       LIST_KINDS.map((k) => h('a', { class: 'chip', href: `#/lister`, onclick: (e) => { e.preventDefault(); document.getElementById(`liste-${k}`).scrollIntoView(); } }, LIST_TITLES[k][0]))),
@@ -552,7 +579,7 @@ function renderSettings() {
     status.textContent = 'Sjekker …';
     try {
       const { login, canWrite } = await testConnection();
-      status.replaceChildren(
+      put(status, 
         canWrite === true ? `Innlogget som ${login}. Nøkkelen kan lagre. `
           : canWrite === false ? `Innlogget som ${login}, men nøkkelen kan bare lese. Rediger nøkkelen på GitHub: velg «Only select repositories» → Matboksen, og sett Contents til «Read and write». `
           : `Innlogget som ${login}. Fikk ikke sjekket om nøkkelen kan lagre; prøv å lagre noe. `,
@@ -561,7 +588,7 @@ function renderSettings() {
     renderNav();
   }
 
-  app.replaceChildren(h('form', { class: 'card form', onsubmit: onSave },
+  put(app, h('form', { class: 'card form', onsubmit: onSave },
     h('h1', {}, 'Innstillinger'),
     h('p', {}, 'Nøkkelen lagres bare i denne nettleseren. Se README i repoet for hvordan du lager en.'),
     h('label', {}, 'GitHub-nøkkel (fine-grained token)', token),
