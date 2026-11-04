@@ -887,15 +887,163 @@
     },
     {
       "id": "id-q42ty",
-      "title": "Henter oppskrift …",
-      "description": "",
-      "servings": null,
-      "timeMinutes": null,
+      "title": "Lasagne",
+      "description": "Hjemmelaget lasagne med ostesaus og kjøttsaus er alltid en vinner på middagsbordet, både for små og store. Her er en klassisk oppskrift. Middels vanskelighetsgrad",
+      "servings": 4,
+      "timeMinutes": 80,
       "cuisineId": null,
       "tagIds": [],
-      "lines": [],
-      "steps": [],
-      "image": null,
+      "lines": [
+        {
+          "ingredientId": "bacon-eller-pancetta-eq161",
+          "amount": 150,
+          "unitId": "g",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "noytral-olje-fsrlu",
+          "amount": 2,
+          "unitId": "ss",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "kjottdeig-1tydr",
+          "amount": 400,
+          "unitId": "g",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "finhakket-lok-wxyty",
+          "amount": 1,
+          "unitId": "stk",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "finhakket-gulrot-dtnbb",
+          "amount": 1,
+          "unitId": "stk",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "stilk-finhakket-stilkselleri-c7g03",
+          "amount": 1,
+          "unitId": null,
+          "note": "stangselleri",
+          "group": ""
+        },
+        {
+          "ingredientId": "noytral-olje-fsrlu",
+          "amount": 1,
+          "unitId": "ss",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "tomatpure-oddy4",
+          "amount": 2,
+          "unitId": "ss",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "hermetiske-tomater-x4h4t",
+          "amount": 2,
+          "unitId": "boks",
+          "note": "á 400 g",
+          "group": ""
+        },
+        {
+          "ingredientId": "kjottkraft-f5d49",
+          "amount": 2,
+          "unitId": "dl",
+          "note": "buljong eller vann",
+          "group": ""
+        },
+        {
+          "ingredientId": "torket-oregano-t3a4f",
+          "amount": 2,
+          "unitId": "ts",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "smor-fefzx",
+          "amount": 3,
+          "unitId": "ss",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "hvetemel-q716e",
+          "amount": 3,
+          "unitId": "ss",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "melk-68wm8",
+          "amount": 6,
+          "unitId": "dl",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "revet-parmesan-eller-annen-hvit-ost-7b5nt",
+          "amount": 5,
+          "unitId": "ss",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "salt-0ut1i",
+          "amount": 1,
+          "unitId": "ts",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "kvernet-pepper-cpq9m",
+          "amount": 0.5,
+          "unitId": "ts",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "revet-muskatnott-pkvtu",
+          "amount": 0.5,
+          "unitId": "ts",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "lasagneplater-frj6i",
+          "amount": 9,
+          "unitId": "stk",
+          "note": "",
+          "group": ""
+        },
+        {
+          "ingredientId": "revet-hvitost-til-toppen-qpk7x",
+          "amount": 3,
+          "unitId": "dl",
+          "note": "",
+          "group": ""
+        }
+      ],
+      "steps": [
+        "Skjær bacon i små biter. Ha olje i en varm panne og stek til baconet til det er gyllent. Ha i litt mer olje og brun kjøttdeig i olje på sterk varme i to omganger.",
+        "Senk varmen litt og ha i løk, gulrot og stilkselleri og la det steke til grønnsakene er blitt myke og blanke. Ha baconet og kjøttdeigen tilbake i stekepanna og bland alt sammen.",
+        "Lag en grop i midten av stekepannen. Ha i litt mer olje og fres tomat puréen i noen minutter. Ha i hermetisk tomat, kraft og krydder. La kjøttsausen småkoke i minst 10 minutter, til den begynner å tykne. Har du litt god tid? La gjerne sausen småkoke under lokk i ca. 1 ½ time, for å utvikle ekstra god smak. Husk å rør litt i kjelen underveis, slik at det ikke fester seg på bunnen av gryta. Smak til med salt og pepper.",
+        "Smelt smør i en kjele og rør inn mel. Spe med melk under omrøring og la sausen koke i ca. 10 minutter. Den skal være forholdsvis tykk. Ha i parmesan og la osten smelte. Smak til ostesausen med krydder.",
+        "Legg kjøttsaus, pastaplater og ostesaus lagvis i en ildfast form. Avslutt med pastaplater og ostesaus. Dryss over revet ost til slutt.",
+        "Sett formen i stekeovn på 200° C og stek i 30-40 minutter. Kjenn etter med en pinne eller spiss kniv om pastaen er mør. La lasagnen hvile noen minutter før servering."
+      ],
+      "image": "images/id-q42ty-import.webp",
       "source": {
         "type": "url",
         "url": "https://www.matprat.no/oppskrifter/familien/lasagne/",
@@ -904,11 +1052,12 @@
       },
       "createdBy": "NicolaiLangehaug",
       "importStatus": {
-        "state": "venter",
-        "at": "2026-11-04T07:26:11.387Z"
+        "state": "ok",
+        "at": "2026-11-04T07:26:23.000Z",
+        "message": "Hentet 20 ingredienser, 6 steg, bilde fra matprat.no."
       },
       "createdAt": "2026-11-04T07:26:11.823Z",
-      "updatedAt": "2026-11-04T07:26:11.823Z"
+      "updatedAt": "2026-11-04T07:26:23.000Z"
     }
   ]
 }
