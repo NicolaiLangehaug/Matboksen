@@ -190,11 +190,14 @@
       "steps": [],
       "image": null,
       "source": {
-        "type": "egen"
+        "type": "url",
+        "url": "https://www.matprat.no/oppskrifter/familien/lasagne/",
+        "site": "matprat.no",
+        "fetchedAt": "2026-11-04"
       },
       "createdBy": "NicolaiLangehaug",
       "createdAt": "2026-11-03T22:00:00.000Z",
-      "updatedAt": "2026-11-03T22:00:00.000Z"
+      "updatedAt": "2026-11-04T06:50:09.762Z"
     },
     {
       "id": "flotegratinerte-poteter-g47nb",
