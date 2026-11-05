@@ -2,6 +2,17 @@
 
 Versjonsnummeret vises nederst i appen. Ved ny versjon: oppdater `VERSION` i `app.js`, `?v=` i `index.html` (to steder) og legg til en linje her.
 
+## 0.5.9 – 2026-11-04
+
+- «Bytt bilde» / «Legg til bilde» rett under bildet på oppskriften; bildet lagres med en gang.
+- I skjemaet ligger bildet ved «Kort beskrivelse», med forhåndsvisning og norsk «Velg bilde»-knapp.
+- Kortere hjelpetekster i skjemaet; forklaringen over ingrediensene er fjernet.
+
+## 0.5.8 – 2026-11-04
+
+- Henting fra lenke tar ikke lenger med nettsidens beskrivelse eller bilde. «Kort beskrivelse» (teksten på polaroiden) og bildet er bare familiens egne.
+- «Fjern bildet» i skjemaet når en rett har bilde.
+
 ## 0.5.7 – 2026-11-04
 
 - Ingredienslinjer kan flyttes opp og ned (↑ ↓), så ingredienser som hører sammen kan samles. Rekkefølgen lagres.

@@ -7,11 +7,9 @@ Skriptet leser schema.org Recipe-data (application/ld+json) fra siden, tolker
 ingredienslinjene til mengde/enhet/ingrediens, og fyller retten. Bestillingene
 slettes etterpå. Status skrives på retten som "importStatus".
 
-Bare standardbiblioteket er påkrevd. Pillow (valgfritt) brukes til å skalere
-ned bildet; uten Pillow hoppes bildet over.
+Henter ikke beskrivelse eller bilde fra siden. Bare standardbiblioteket er påkrevd.
 """
 import html
-import io
 import json
 import os
 import random
@@ -27,7 +25,6 @@ from pathlib import Path
 ROOT = Path(os.environ.get('MATBOKSEN_ROOT', Path(__file__).resolve().parent))
 DB = ROOT / 'db.json'
 IMPORTS = ROOT / 'imports'
-IMAGES = ROOT / 'images'
 UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
 PLACEHOLDER_TITLE = 'Henter oppskrift'
 
@@ -90,16 +87,6 @@ def clean_text(s):
     s = re.sub(r'<br\s*/?>', '\n', s, flags=re.I)
     s = re.sub(r'<[^>]+>', '', s)
     return re.sub(r'[ \t\xa0]+', ' ', s).strip()
-
-
-def first_url(img):
-    if isinstance(img, str):
-        return img
-    if isinstance(img, list) and img:
-        return first_url(img[0])
-    if isinstance(img, dict):
-        return img.get('url') or img.get('contentUrl')
-    return None
 
 
 # ---------------------------------------------------------------- henting
@@ -260,22 +247,6 @@ def parse_ingredient(raw):
     return {'amount': tidy_amount(amount), 'unit': unit, 'name': name, 'note': ', '.join(note_parts)}
 
 
-# ---------------------------------------------------------------- bilde
-def save_image(url, recipe_id):
-    try:
-        from PIL import Image, ImageOps
-    except ImportError:
-        return None
-    data = fetch(url, binary=True)
-    im = Image.open(io.BytesIO(data))
-    im = ImageOps.exif_transpose(im).convert('RGB')
-    im.thumbnail((1600, 1600))
-    IMAGES.mkdir(exist_ok=True)
-    name = f'images/{recipe_id}-import.webp'
-    im.save(ROOT / name, 'WEBP', quality=80)
-    return name
-
-
 # ---------------------------------------------------------------- inn i db
 def apply(db, recipe, req, data, now):
     replace = bool(req.get('replace'))
@@ -283,9 +254,7 @@ def apply(db, recipe, req, data, now):
     title = clean_text(data.get('name'))
     if title and (replace or not recipe.get('title') or recipe['title'].startswith(PLACEHOLDER_TITLE)):
         recipe['title'] = title
-    desc = clean_text(data.get('description'))
-    if desc and (replace or not recipe.get('description')):
-        recipe['description'] = desc[:300]
+    # Beskrivelsen fra nettsiden hentes ikke: «Kort beskrivelse» er for egne korte notater.
     servings = parse_yield(data.get('recipeYield'))
     if servings and (replace or not recipe.get('servings')):
         recipe['servings'] = servings
@@ -318,15 +287,7 @@ def apply(db, recipe, req, data, now):
         recipe['steps'] = steps
         filled.append(f'{len(steps)} steg')
 
-    img = first_url(data.get('image'))
-    if img and (replace or not recipe.get('image')):
-        try:
-            path = save_image(img, recipe['id'])
-            if path:
-                recipe['image'] = path
-                filled.append('bilde')
-        except Exception as e:  # bilde er ikke kritisk
-            print(f'  bilde feilet: {e}', file=sys.stderr)
+    # Bilder hentes ikke fra nettsiden; bildet er familiens eget.
 
     if recipe.get('title', '').startswith(PLACEHOLDER_TITLE):
         recipe['title'] = 'Uten navn'

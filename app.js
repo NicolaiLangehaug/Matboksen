@@ -5,7 +5,7 @@ import {
   mergeIngredients, filterRecipes, LIST_KINDS, usage, addItem, renameItem, deleteItem,
 } from './model.js';
 
-export const VERSION = '0.5.7';
+export const VERSION = '0.5.9';
 
 const app = document.getElementById('app');
 document.getElementById('version').textContent = `Matboksen ${VERSION}`;
@@ -218,6 +218,29 @@ function renderRecipe(id) {
   const st = r.importStatus;
   const hasContent = r.lines.length || r.steps.length;
 
+  // Bytt eller legg til bilde rett fra oppskriften.
+  const photoInput = h('input', { type: 'file', accept: 'image/*', class: 'visually-hidden', tabindex: '-1', 'aria-hidden': 'true',
+    onchange: async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      photoBtn.disabled = true;
+      photoBtn.textContent = 'Laster opp …';
+      try {
+        const { blob, ext } = await downscale(file);
+        const path = await uploadImage(`images/${r.id}-${Date.now()}.${ext}`, blob);
+        const res = await save((d) => { const x = byId(d.recipes, r.id); if (x) x.image = path; }, `Nytt bilde: ${r.title}`);
+        db = res.db;
+        toast('Bildet er lagret.');
+        renderRecipe(r.id);
+      } catch (err) {
+        toast(err.message, true);
+        photoBtn.disabled = false;
+        photoBtn.textContent = r.image ? 'Bytt bilde' : 'Legg til bilde';
+      }
+    } });
+  const photoBtn = h('button', { type: 'button', class: 'link photo-btn', onclick: () => photoInput.click() }, r.image ? 'Bytt bilde' : 'Legg til bilde');
+  const photoTools = hasToken() ? h('p', { class: 'photo-tools' }, photoBtn, photoInput) : null;
+
   async function startImport() {
     if (hasContent && !confirm(`Erstatte ingredienser og fremgangsmåte med det som står på ${site}?`)) return;
     try {
@@ -259,6 +282,7 @@ function renderRecipe(id) {
     banner,
     h('article', { class: 'card recipe' },
     photo,
+    photoTools,
     r.tagIds.length ? h('div', { class: 'stamps' }, r.tagIds.map((t) => h('a', { class: 'stamp', href: filterHref('merkelapp', t), 'aria-label': `Alle retter merket ${nameOf(db.tags, t)}` }, nameOf(db.tags, t)))) : null,
     h('h1', {}, r.title),
     h('p', { class: 'muted meta' },
@@ -318,7 +342,20 @@ function renderForm(id) {
   const newTags = h('input', { placeholder: 'f.eks. hverdag, sunn' });
   const steps = h('textarea', { rows: 8, value: existing ? existing.steps.join('\n') : '' });
   const sourceUrl = h('input', { type: 'url', placeholder: 'https://…', value: existing?.source?.url || '' });
-  const imageInput = h('input', { type: 'file', accept: 'image/*', onchange: (e) => { imageFile = e.target.files[0] || null; } });
+  const preview = h('img', { class: 'thumb', alt: '' });
+  if (existing?.image) setImage(preview, existing.image); else preview.hidden = true;
+  const removeImage = h('input', { type: 'checkbox', onchange: (e) => { preview.style.opacity = e.target.checked ? '.3' : ''; } });
+  const imageInput = h('input', { type: 'file', accept: 'image/*', class: 'visually-hidden', id: 'bildefil',
+    onchange: (e) => {
+      imageFile = e.target.files[0] || null;
+      if (!imageFile) return;
+      preview.src = URL.createObjectURL(imageFile);
+      preview.hidden = false;
+      preview.style.opacity = '';
+      removeImage.checked = false;
+      chooseLabel.textContent = 'Velg et annet bilde';
+    } });
+  const chooseLabel = h('label', { class: 'button secondary', for: 'bildefil' }, existing?.image ? 'Bytt bilde' : 'Velg bilde');
 
   const linesBox = h('div', { class: 'lines' });
   // Slå av «opp» på første og «ned» på siste linje.
@@ -411,6 +448,8 @@ function renderForm(id) {
       if (imageFile) {
         const { blob, ext } = await downscale(imageFile);
         form.image = await uploadImage(`images/${id}-${Date.now()}.${ext}`, blob);
+      } else if (removeImage.checked) {
+        form.image = null;
       }
       const s = settings();
       const res = await save((d) => upsertRecipe(d, form, new Date().toISOString(), s.login), `${recipeId ? 'Endret' : 'Ny'} oppskrift: ${form.title.trim()}`);
@@ -444,24 +483,27 @@ function renderForm(id) {
     h('form', { class: 'card form', onsubmit: onSubmit },
     h('h1', {}, existing ? 'Rediger oppskrift' : 'Ny oppskrift'),
     h('label', {}, 'Lenke til oppskriften (valgfritt)', sourceUrl,
-      h('span', { class: 'hint' }, 'Er ingrediensene og fremgangsmåten tomme, hentes de fra lenken når du lagrer.')),
+      h('span', { class: 'hint' }, 'Ingredienser og fremgangsmåte hentes når du lagrer.')),
     h('label', {}, 'Tittel', title),
-    h('label', {}, 'Kort beskrivelse', description),
+    h('label', {}, 'Kort beskrivelse', description,
+      h('span', { class: 'hint' }, 'Står på bildet.')),
+    h('div', { class: 'image-field' },
+      h('span', { class: 'label' }, 'Bilde'),
+      h('div', { class: 'image-row' }, preview, imageInput, chooseLabel,
+        existing?.image ? h('label', { class: 'check-line' }, removeImage, 'Fjern bildet') : null)),
     h('div', { class: 'row' },
       h('label', {}, 'Porsjoner', servings),
       h('label', {}, 'Tid (min)', time)),
     h('fieldset', {}, h('legend', {}, 'Ingredienser'),
-      h('p', { class: 'muted' }, 'Velg fra listen eller skriv en ny ingrediens. Mengde kan være 1,5 eller 1/2. Bruk ↑ ↓ for å samle ingredienser som hører sammen, for eksempel det som blir sausen.'),
       linesBox,
       h('button', { type: 'button', class: 'secondary', onclick: () => addLine() }, '+ Legg til linje'),
       datalist('dl-ing', db.ingredients)),
     h('label', {}, 'Fremgangsmåte (ett steg per linje)', steps),
     h('label', {}, 'Kjøkken', cuisine,
-      h('span', { class: 'hint' }, 'Mangler kjøkkenet? Legg det til under ', h('a', { href: '#/lister' }, 'Lister'), '.')),
+      h('span', { class: 'hint' }, 'Nye kjøkken: ', h('a', { href: '#/lister' }, 'Lister'))),
     h('fieldset', {}, h('legend', {}, 'Merkelapper'),
       tagBox,
       h('label', {}, 'Nye merkelapper (kommaseparert)', newTags)),
-    h('label', {}, existing?.image ? 'Bytt bilde' : 'Bilde', imageInput),
     h('div', { class: 'actions sticky-actions' },
       saveBtn,
       h('a', { href: existing ? `#/oppskrift/${encodeURIComponent(existing.id)}` : '#/' }, 'Avbryt'),

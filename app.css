@@ -169,3 +169,17 @@ a.stamp:hover, a.stamp:focus { background: var(--accent); color: var(--accent-in
 .spinner { display: inline-block; width: 14px; height: 14px; margin-right: 8px; vertical-align: -2px; border: 2px solid var(--rule); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+.check-line { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+
+/* Bilde: knapp på oppskriften og felt i skjema */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.photo-tools { margin: -14px 0 12px 6px; }
+.photo-btn { min-height: 44px; }
+.image-field { margin-bottom: 16px; }
+.image-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.image-row .thumb { width: 72px; height: 72px; object-fit: cover; border: 4px solid #FFFFFF; box-shadow: 0 1px 3px rgba(46,42,36,.3); }
+.image-row label.button { margin: 0; }
+.image-row .check-line { margin: 0; }
+.image-row input:focus-visible + label.button { outline: 2px solid var(--accent); outline-offset: 2px; }
+.button.secondary { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+.button.secondary:hover { background: var(--accent); color: var(--accent-ink); }
