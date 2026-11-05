@@ -1097,7 +1097,7 @@
     {
       "id": "id-f6olx",
       "title": "Quiche Lorraine",
-      "description": "Quiche lorraine er kanskje den mest kjente av alle salte paier. Fylt med bacon, purre, ost og egg er den i all sin enkelhet en rett full av smak. Middels vanskelighetsgrad",
+      "description": "",
       "servings": 4,
       "timeMinutes": 80,
       "cuisineId": "fransk-qri12",
@@ -1184,7 +1184,7 @@
       },
       "createdBy": "NicolaiLangehaug",
       "createdAt": "2026-11-04T16:56:26.629Z",
-      "updatedAt": "2026-11-04T16:58:06.071Z"
+      "updatedAt": "2026-11-05T10:56:14.867Z"
     }
   ]
 }
